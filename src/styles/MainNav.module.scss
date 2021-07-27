@@ -1,0 +1,80 @@
+@import "./variables.scss";
+
+nav.mainNav {
+  max-width: 50%;
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navContainer {
+  display: flex;
+  align-items: center;
+}
+
+.navList {
+  display: flex;
+
+  .navItem {
+    margin-inline: 1em;
+
+    a {
+      font-size: large;
+      transition: $transition-duration;
+
+      &:hover {
+        color: $font-color-dark;
+      }
+    }
+  }
+}
+
+.profile {
+  margin-left: 2em;
+  .userProfile {
+    position: relative;
+
+    .userInfo {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+
+      .userAvatar {
+        margin-right: 0.5em;
+      }
+
+      p {
+        font-size: larger;
+        font-weight: 500;
+        margin-right: 0.5em;
+      }
+    }
+
+    .userDropdown {
+      position: absolute;
+      min-width: 15em;
+      top: 100%;
+      right: 0;
+      background-color: $background-color-light;
+      border-radius: $border-small;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+
+      * {
+        padding: 0.75em 1em;
+        text-align: end;
+      }
+
+      button {
+        width: 100%;
+        background: none;
+
+        &:hover {
+          background-color: $background-color-hover;
+        }
+      }
+    }
+  }
+}
