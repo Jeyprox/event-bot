@@ -26,6 +26,7 @@ ul {
 
 button,
 .btn {
+  font: unset;
   cursor: pointer;
   outline: none;
   border: none;
@@ -34,7 +35,7 @@ button,
   padding: 10px 15px;
   border-radius: $border-small;
   transition: $transition-duration;
-  font-weight: bold;
+  font-weight: 500;
   font-size: medium;
 
   &:hover {

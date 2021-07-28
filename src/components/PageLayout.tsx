@@ -2,18 +2,18 @@ import layoutStyles from "../styles/PageLayout.module.scss";
 import MainNav from "./MainNav";
 
 interface LayoutProps {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }
 
-const PageLayout = ({children}: LayoutProps) => {
-    return (
-        <>
+const PageLayout = ({ children }: LayoutProps) => {
+  return (
+    <>
+      <header className={layoutStyles.layoutItem}>
         <MainNav />
-        <main className={layoutStyles.mainPage}>
-            {children}
-        </main>
-        </>
-    )
-}
+      </header>
+      <main className={layoutStyles.layoutItem}>{children}</main>
+    </>
+  );
+};
 
-export default PageLayout
+export default PageLayout;

@@ -1,16 +1,20 @@
 import "../styles/globals.scss";
 import { AppProps } from "next/app";
 import Layout from "../components/PageLayout";
-import { Provider } from "next-auth/client";
+import { Provider as AuthProvider } from "next-auth/client";
+import { CookiesProvider } from "react-cookie";
+import { appWithTranslation } from "next-i18next";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <Provider session={pageProps.session}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </Provider>
+    <AuthProvider session={pageProps.session}>
+      <CookiesProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </CookiesProvider>
+    </AuthProvider>
   );
 }
 
-export default MyApp;
+export default appWithTranslation(MyApp);

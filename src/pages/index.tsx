@@ -1,8 +1,11 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.scss";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 export default function Home() {
+  const { t } = useTranslation("common");
   return (
     <div className={styles.container}>
       <Head>
@@ -13,7 +16,15 @@ export default function Home() {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1>Test</h1>
+      <h1>{t("slogan")}</h1>
     </div>
   );
 }
+
+export const getStaticProps = async ({ locale }: any) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+};
