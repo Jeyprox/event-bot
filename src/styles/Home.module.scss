@@ -1,0 +1,30 @@
+@import "./variables.scss";
+
+.landingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: min(80vh, 60rem);
+
+  h1 {
+    font-size: 5rem;
+    margin-block: 0.1em;
+  }
+
+  p {
+    font-size: 1.2rem;
+    color: $font-color-dark;
+  }
+
+  .landingDiscover {
+    display: flex;
+    margin-top: 3em;
+
+    button {
+      font-size: 1.2rem;
+      font-weight: normal;
+      margin-inline: 0.5em;
+    }
+  }
+}

@@ -1,13 +1,10 @@
 import Head from "next/head";
-import Image from "next/image";
+import Link from "next/link";
 import styles from "../styles/Home.module.scss";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useTranslation } from "next-i18next";
 
 export default function Home() {
-  const { t } = useTranslation("common");
   return (
-    <div className={styles.container}>
+    <>
       <Head>
         <title>EventBot</title>
         <meta
@@ -16,15 +13,21 @@ export default function Home() {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1>{t("slogan")}</h1>
-    </div>
+      <section className={styles.landingContainer}>
+        <h1>Plan your next Discord event</h1>
+        <p>
+          Create custom events for your target audience and discover your
+          interests with the event finder.
+        </p>
+        <div className={styles.landingDiscover}>
+          <button className="btn-primary">
+            <Link href="/events/create">Plan an Event</Link>
+          </button>
+          <button>
+            <Link href="/servers/me">Add to your Server</Link>
+          </button>
+        </div>
+      </section>
+    </>
   );
 }
-
-export const getStaticProps = async ({ locale }: any) => {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, ["common"])),
-    },
-  };
-};

@@ -4,6 +4,12 @@ nav.mainNav {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-block: 1.5em;
+
+  .logo a {
+    font-size: x-large;
+    font-weight: bold;
+  }
 }
 
 .navContainer {
@@ -13,6 +19,7 @@ nav.mainNav {
 
 .navList {
   display: flex;
+  margin: 0;
 
   .navItem {
     margin-inline: 1em;
@@ -28,51 +35,13 @@ nav.mainNav {
   }
 }
 
-.langSelection {
-  position: relative;
-  margin-inline: 2em;
-
-  .langInfo {
-    user-select: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    p {
-      font-size: large;
-      font-weight: bold;
-      margin-right: 0.5em;
-    }
-  }
-
-  .langDropdown {
-    min-width: 10em;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background-color: $background-color-light;
-    border-radius: $border-small;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    overflow: hidden;
-
-    p {
-      width: 100%;
-      cursor: pointer;
-      margin: 0;
-      padding: 0.75em 1em;
-      text-align: end;
-      font-size: medium;
-
-      &:hover {
-        background-color: $background-color-hover;
-      }
-    }
-  }
-}
-
 .profile {
   margin-left: 1em;
+
+  & > button {
+    padding-block: 0.5em;
+  }
+
   .userProfile {
     position: relative;
 
@@ -94,6 +63,12 @@ nav.mainNav {
         font-size: larger;
         font-weight: 500;
         margin-right: 0.5em;
+        margin-block: 0;
+      }
+
+      svg {
+        width: 1em;
+        height: 1em;
       }
     }
 

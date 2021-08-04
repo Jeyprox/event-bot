@@ -8,6 +8,7 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   color: $font-color;
   background-color: $background-color;
+  min-height: 100vh;
 }
 
 a {
@@ -50,4 +51,22 @@ button,
       background-color: $primary-hover;
     }
   }
+}
+
+.drop-enter {
+  opacity: 0;
+  transform: translateY(-1em);
+}
+.drop-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: $transition-duration;
+}
+.drop-exit {
+  opacity: 1;
+}
+.drop-exit-active {
+  opacity: 0;
+  transform: translateY(-1em);
+  transition: $transition-duration;
 }
