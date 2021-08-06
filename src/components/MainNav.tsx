@@ -22,13 +22,13 @@ const MainNav = () => {
       <div className={navStyles.navContainer}>
         <ul className={navStyles.navList}>
           <li className={navStyles.navItem}>
+            <Link href="/features">Features</Link>
+          </li>
+          <li className={navStyles.navItem}>
             <Link href="/events">Events</Link>
           </li>
           <li className={navStyles.navItem}>
             <Link href="/servers">Servers</Link>
-          </li>
-          <li className={navStyles.navItem}>
-            <Link href="/about">About</Link>
           </li>
         </ul>
         <div className={navStyles.profile}>

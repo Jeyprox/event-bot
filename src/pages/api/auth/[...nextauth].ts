@@ -8,6 +8,13 @@ export default NextAuth({
       clientSecret: process.env.DISCORD_CLIENT_SECRET,
     }),
   ],
+  callbacks: {
+    session: async (session, user) => {
+      session.id = user.id;
+
+      return Promise.resolve(session);
+    },
+  },
   database: process.env.DATABASE_URL,
   secret: process.env.DISCORD_COOKIE_SECRET,
 });

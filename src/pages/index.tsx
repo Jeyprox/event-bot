@@ -1,8 +1,20 @@
+import { FunctionComponent } from "react";
+import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
+
+import axios from "axios";
+
 import styles from "../styles/Home.module.scss";
 
-export default function Home() {
+import { Guild } from "../common/types";
+import { getSession } from "next-auth/client";
+
+type Props = {
+  guildList: Array<Guild>;
+};
+
+const Home: FunctionComponent<Props> = ({ guildList }) => {
   return (
     <>
       <Head>
@@ -28,6 +40,24 @@ export default function Home() {
           </button>
         </div>
       </section>
+      <section>
+        {guildList?.map((guildItem: Guild) => (
+          <div key={guildItem.id}>{guildItem.name}</div>
+        ))}
+      </section>
     </>
   );
-}
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getSession({ ctx });
+
+  const res = await axios.get(
+    `http://localhost:3000/api/guilds/guildList?userId=${session?.id}`
+  );
+  const guildList: Array<Guild> = res.data;
+
+  return { props: { guildList } };
+};
+
+export default Home;
