@@ -41,9 +41,10 @@ const Home: FunctionComponent<Props> = ({ guildList }) => {
         </div>
       </section>
       <section>
-        {guildList?.map((guildItem: Guild) => (
-          <div key={guildItem.id}>{guildItem.name}</div>
-        ))}
+        {guildList &&
+          guildList?.map((guildItem: Guild) => (
+            <div key={guildItem.id}>{guildItem.name}</div>
+          ))}
       </section>
     </>
   );
@@ -51,13 +52,14 @@ const Home: FunctionComponent<Props> = ({ guildList }) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = await getSession({ ctx });
-  if (!session) return;
-  const res = await axios.get(
-    `http://localhost:3000/api/guilds/guildList?userId=${session?.id}`
-  );
-  const guildList: Array<Guild> = res.data;
-
-  return { props: { guildList } };
+  if (session) {
+    const res = await axios.get(
+      `http://localhost:3000/api/guilds/guildList?userId=${session?.id}`
+    );
+    const guildList: Array<Guild> = res.data;
+    return { props: { guildList } };
+  }
+  return { props: {} };
 };
 
 export default Home;
