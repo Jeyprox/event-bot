@@ -51,7 +51,7 @@ const Home: FunctionComponent<Props> = ({ guildList }) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = await getSession({ ctx });
-
+  if (!session) return;
   const res = await axios.get(
     `http://localhost:3000/api/guilds/guildList?userId=${session?.id}`
   );
