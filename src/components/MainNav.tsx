@@ -66,8 +66,8 @@ const MainNav = () => {
                 unmountOnExit
               >
                 <div ref={transitionRef} className={navStyles.userDropdown}>
-                  <Link href="/servers/me">My Servers</Link>
-                  <Link href="/events/me">My Events</Link>
+                  <Link href="/servers/@me">My Servers</Link>
+                  <Link href="/events/@me">My Events</Link>
                   <button
                     onClick={() => signOut()}
                     className={navStyles.extraItem}
