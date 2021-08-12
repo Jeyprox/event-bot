@@ -4,11 +4,9 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 const guildHandler = async (_: NextApiRequest, res: NextApiResponse) => {
   const guildRes = await axios.get("https://discord.com/api/users/@me/guilds", {
-    headers: { Authorization: `Bot ${process.env.DISCORD_CLIENT_SECRET}` },
+    headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` },
   });
-  console.log(guildRes);
-
-  res.status(200).json(guildRes);
+  res.status(200).json(guildRes.data);
 };
 
 export default guildHandler;

@@ -1,4 +1,5 @@
 import { FunctionComponent } from "react";
+import { useRouter } from "next/router";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -28,6 +29,7 @@ const fetcher = async (url: string) => {
 };
 
 const MyServers: FunctionComponent<Props> = () => {
+  const router = useRouter();
   const [session] = useSession();
   const {
     data: guildList,
@@ -38,6 +40,39 @@ const MyServers: FunctionComponent<Props> = () => {
     revalidateOnMount: false,
     shouldRetryOnError: false,
   });
+  const {
+    data: botList,
+    error: botError,
+    isValidating: botLoading,
+  } = useSWR("/api/guilds/activeGuilds", fetcher, {
+    revalidateOnFocus: false,
+    shouldRetryOnError: false,
+  });
+
+  const guildLink = (guildId: string) => {
+    if (isActive(guildId)) router.push(`/servers/${guildId}`);
+    else
+      window.open(
+        `https://discord.com/api/oauth2/authorize?client_id=814902736503570492&permissions=8&scope=bot&guild_id=${guildId}`,
+        "",
+        `left=32,top=32,width=480,height=800`
+      );
+  };
+
+  const isActive = (guildId: string) => {
+    const activeGuild = botList?.find((guild: Guild) => guild.id === guildId);
+    if (activeGuild) {
+      guildList.splice(
+        guildList
+          .map((guildItem: Guild) => guildItem.id)
+          .indexOf(activeGuild.id),
+        1
+      );
+      guildList.splice(0, 0, activeGuild);
+      return true;
+    }
+    return false;
+  };
 
   return (
     <>
@@ -57,35 +92,31 @@ const MyServers: FunctionComponent<Props> = () => {
           </div>
         ) : (
           <div className={serverStyles.serverList}>
-            {" "}
             {guildList?.map((guildItem: Guild) => (
-              <Link
+              <div
                 key={guildItem.id}
-                href={`/servers/${guildItem.id}`}
-                passHref
+                className={serverStyles.serverItem}
+                onClick={() => guildLink(guildItem.id)}
               >
-                <div className={serverStyles.serverItem}>
-                  {" "}
-                  <div className={serverStyles.serverInfo}>
-                    {guildItem.icon ? (
-                      <Image
-                        src={`https://cdn.discordapp.com/icons/${guildItem.id}/${guildItem?.icon}.png`}
-                        alt="guild icon"
-                        width={48}
-                        height={48}
-                      />
-                    ) : (
-                      <span>{guildItem.name.match(/\b(\w)/g)}</span>
-                    )}
-                    <h2>{guildItem.name}</h2>
-                  </div>
-                  {guildItem?.id ? (
-                    <button className="btn-primary">Dashboard</button>
+                <div className={serverStyles.serverInfo}>
+                  {guildItem.icon ? (
+                    <Image
+                      src={`https://cdn.discordapp.com/icons/${guildItem.id}/${guildItem?.icon}.png`}
+                      alt="guild icon"
+                      width={48}
+                      height={48}
+                    />
                   ) : (
-                    <button>Set Up</button>
+                    <span>{guildItem.name.match(/\b(\w)/g)}</span>
                   )}
+                  <h2>{guildItem.name}</h2>
                 </div>
-              </Link>
+                {!botLoading && !isValidating && isActive(guildItem.id) ? (
+                  <button className="btn-primary">Dashboard</button>
+                ) : (
+                  <button className={serverStyles.setupBtn}>Set Up</button>
+                )}
+              </div>
             ))}
           </div>
         )}

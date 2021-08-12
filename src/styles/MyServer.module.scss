@@ -76,5 +76,12 @@
         font-weight: 500;
       }
     }
+
+    button {
+      min-width: 8em;
+      &.setupBtn:hover {
+        background-color: $background-color-hover;
+      }
+    }
   }
 }
