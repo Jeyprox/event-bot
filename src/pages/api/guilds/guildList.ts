@@ -13,7 +13,9 @@ const mysql = require("serverless-mysql")({
 
 const guildHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const userId = req.query.userId;
-  if (!userId) return res.status(403).send({ error: "No user specified" });
+  if (!userId) return res.status(500).send({ error: "No user specified" });
+  if (isNaN(Number(userId)))
+    return res.status(500).send({ error: "UserId is not a number" });
   const results = await mysql.query(
     `SELECT access_token FROM accounts WHERE user_id = ${userId}`
   );

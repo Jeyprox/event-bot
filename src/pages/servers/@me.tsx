@@ -1,28 +1,37 @@
-import { FunctionComponent, useEffect } from "react";
-import { GetServerSideProps } from "next";
+import { FunctionComponent } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import useSWR from "swr";
 
-import axios from "axios";
-
 import { Guild } from "../../common/types";
-import { getSession, useSession } from "next-auth/client";
+import { useSession } from "next-auth/client";
 
 import serverStyles from "../../styles/MyServer.module.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFrownOpen } from "@fortawesome/free-solid-svg-icons";
 
 type Props = {
   guildList: Array<Guild>;
 };
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = async (url: string) => {
+  const res = await fetch(url);
+
+  if (!res.ok) {
+    const resJson = await res.json();
+    const error = new Error(resJson.error);
+    throw error;
+  }
+
+  return res.json();
+};
 
 const MyServers: FunctionComponent<Props> = () => {
   const [session] = useSession();
   const {
     data: guildList,
-    error,
+    error: guildError,
     isValidating,
   } = useSWR(() => "/api/guilds/guildList?userId=" + session?.id, fetcher, {
     revalidateOnFocus: false,
@@ -37,12 +46,16 @@ const MyServers: FunctionComponent<Props> = () => {
       </Head>
       <section className={serverStyles.container}>
         <h1>Select your server</h1>
-        {isValidating && (
+        {guildError ? (
+          <div className={serverStyles.errorMessage}>
+            <FontAwesomeIcon icon={faFrownOpen} />
+            <h2>Error: {guildError.message}</h2>
+          </div>
+        ) : isValidating ? (
           <div>
             <h1>Loading...</h1>
           </div>
-        )}
-        {guildList && !error && (
+        ) : (
           <div className={serverStyles.serverList}>
             {" "}
             {guildList?.map((guildItem: Guild) => (
@@ -79,24 +92,6 @@ const MyServers: FunctionComponent<Props> = () => {
       </section>
     </>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const session = await getSession({ ctx });
-  if (session) {
-    const res = await axios.get(
-      `${process.env.SERVER_HOST}/api/guilds/guildList?userId=${session?.id}`
-    );
-    const guildList: Array<Guild> = res.data;
-    return { props: { guildList } };
-  } else {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: true,
-      },
-    };
-  }
 };
 
 export default MyServers;
