@@ -13,13 +13,12 @@ const mysql = require("serverless-mysql")({
 
 const guildHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const userId = req.query.userId;
+  if (!userId) return res.status(403).send({ error: "No user specified" });
   const results = await mysql.query(
     `SELECT access_token FROM accounts WHERE user_id = ${userId}`
   );
-  if (!results.length) {
-    res.status(500).json({ error: "No account found" });
-    return;
-  }
+  if (!results.length)
+    return res.status(500).json({ error: "No account found" });
 
   const guildRes = await axios.get("https://discord.com/api/users/@me/guilds", {
     headers: { Authorization: `Bearer ${results[0].access_token}` },

@@ -56,7 +56,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = await getSession({ ctx });
   if (session) {
     const res = await axios.get(
-      `http://localhost:3000/api/guilds/guildList?userId=${session?.id}`
+      `${process.env.SERVER_HOST}/api/guilds/guildList?userId=${session?.id}`
     );
     const guildList: Array<Guild> = res.data;
     return { props: { guildList } };
