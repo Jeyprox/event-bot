@@ -1,5 +1,4 @@
 import { FunctionComponent } from "react";
-import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 

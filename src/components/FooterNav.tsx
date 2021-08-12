@@ -113,10 +113,10 @@ const FooterNav = () => {
             <h2>Personal</h2>
             <ul>
               <li>
-                <Link href="/events/me">My Events</Link>
+                <Link href="/events/@me">My Events</Link>
               </li>
               <li>
-                <Link href="/servers/me">My Servers</Link>
+                <Link href="/servers/@me">My Servers</Link>
               </li>
             </ul>
           </div>

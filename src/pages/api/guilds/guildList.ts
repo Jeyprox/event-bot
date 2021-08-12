@@ -29,7 +29,11 @@ const guildHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   });
 
   await mysql.end();
-  res.status(200).json(filteredGuilds);
+  res
+    .status(200)
+    .json(
+      filteredGuilds.sort((a: Guild, b: Guild) => a.name.localeCompare(b.name))
+    );
 };
 
 export default guildHandler;
