@@ -2,52 +2,30 @@ import { FunctionComponent } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import Image from "next/image";
-import Link from "next/link";
 import useSWR from "swr";
 
 import { Guild } from "../../common/types";
 import { useSession } from "next-auth/client";
 
-import serverStyles from "../../styles/MyServer.module.scss";
+import serverStyles from "../../styles/MyServers.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFrownOpen } from "@fortawesome/free-solid-svg-icons";
 
-type Props = {
-  guildList: Array<Guild>;
-};
-
-const fetcher = async (url: string) => {
-  const res = await fetch(url);
-
-  if (!res.ok) {
-    const resJson = await res.json();
-    const error = new Error(resJson.error);
-    throw error;
-  }
-
-  return res.json();
-};
-
-const MyServers: FunctionComponent<Props> = () => {
+const MyServers: FunctionComponent = () => {
   const router = useRouter();
   const [session] = useSession();
   const {
     data: guildList,
     error: guildError,
     isValidating,
-  } = useSWR(() => "/api/guilds/guildList?userId=" + session?.id, fetcher, {
-    revalidateOnFocus: false,
-    revalidateOnMount: false,
-    shouldRetryOnError: false,
-  });
+  } = useSWR(() =>
+    session ? "/api/guilds/guildList?userId=" + session?.id : null
+  );
   const {
     data: botList,
     error: botError,
     isValidating: botLoading,
-  } = useSWR("/api/guilds/activeGuilds", fetcher, {
-    revalidateOnFocus: false,
-    shouldRetryOnError: false,
-  });
+  } = useSWR("/api/guilds/activeGuilds");
 
   const guildLink = (guildId: string) => {
     if (isActive(guildId)) router.push(`/servers/${guildId}`);

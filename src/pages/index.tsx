@@ -26,7 +26,7 @@ const Home: FunctionComponent = () => {
             <Link href="/events/create">Plan an Event</Link>
           </button>
           <button>
-            <Link href="/servers/me">Add to your Server</Link>
+            <Link href="/servers/@me">Add to your Server</Link>
           </button>
         </div>
       </section>

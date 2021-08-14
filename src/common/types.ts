@@ -6,3 +6,9 @@ export interface Guild {
   permissions: number;
   features: string[];
 }
+
+export interface EventItem {
+  event_id: string;
+  event_name: string;
+  creator: number;
+}
