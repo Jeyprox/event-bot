@@ -16,7 +16,7 @@ const eventHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (isNaN(Number(userId)))
     return res.status(500).send({ error: "UserId is not a number" });
   const results = await mysql.query(
-    `SELECT * FROM events WHERE creator = ${userId}`
+    `SELECT * FROM events WHERE creator = ${userId} ORDER BY updated_at DESC`
   );
   if (!results.length)
     return res.status(500).json({ error: "No account found" });

@@ -30,7 +30,7 @@
 }
 
 .serverList {
-  width: 64%;
+  width: 50em;
   margin-inline: auto;
   display: flex;
   flex-direction: column;
@@ -42,7 +42,7 @@
     align-items: center;
     justify-content: space-between;
     margin-block: 0.1em;
-    padding: 0.5em;
+    padding: 0.5em 1em;
     border-radius: $border-small;
     transition: $transition-duration;
 

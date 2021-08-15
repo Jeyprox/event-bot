@@ -10,6 +10,7 @@ import { useSession } from "next-auth/client";
 import serverStyles from "../../styles/MyServers.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFrownOpen } from "@fortawesome/free-solid-svg-icons";
+import LoadingCircle from "../../components/LoadingCircle";
 
 const MyServers: FunctionComponent = () => {
   const router = useRouter();
@@ -59,14 +60,14 @@ const MyServers: FunctionComponent = () => {
       </Head>
       <section className={serverStyles.container}>
         <h1>Select your server</h1>
-        {guildError ? (
+        {isValidating ? (
+          <div>
+            <LoadingCircle />
+          </div>
+        ) : guildError ? (
           <div className={serverStyles.errorMessage}>
             <FontAwesomeIcon icon={faFrownOpen} />
             <h2>Error: {guildError.message}</h2>
-          </div>
-        ) : isValidating ? (
-          <div>
-            <h1>Loading...</h1>
           </div>
         ) : (
           <div className={serverStyles.serverList}>

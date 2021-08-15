@@ -1,5 +1,6 @@
 import { FunctionComponent } from "react";
 import Head from "next/head";
+import Link from "next/link";
 import useSWR from "swr";
 
 import { useSession } from "next-auth/client";
@@ -9,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFrownOpen } from "@fortawesome/free-solid-svg-icons";
 
 import { EventItem } from "../../common/types";
+import LoadingCircle from "../../components/LoadingCircle";
 
 const MyEvents: FunctionComponent = () => {
   const [session] = useSession();
@@ -28,7 +30,7 @@ const MyEvents: FunctionComponent = () => {
         <h1>Manage your events</h1>
         {isValidating ? (
           <div>
-            <h1>Loading...</h1>
+            <LoadingCircle />
           </div>
         ) : eventError ? (
           <div>
@@ -38,7 +40,18 @@ const MyEvents: FunctionComponent = () => {
         ) : (
           <div className={eventStyles.eventList}>
             {eventList?.map((event: EventItem) => (
-              <div key={event.event_id}>{event.event_name}</div>
+              <div className={eventStyles.eventItem} key={event.event_id}>
+                <div className={eventStyles.eventInfo}>
+                  <h2>{event.event_name}</h2>
+                </div>
+                <div className={eventStyles.eventLink}>
+                  <Link href={`/events/${event.event_id}`} passHref>
+                    <a>
+                      <button className="btn btn-primary">Manage</button>
+                    </a>
+                  </Link>
+                </div>
+              </div>
             ))}
           </div>
         )}
