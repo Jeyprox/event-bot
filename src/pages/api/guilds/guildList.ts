@@ -25,6 +25,10 @@ const guildHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const guildRes = await axios.get("https://discord.com/api/users/@me/guilds", {
     headers: { Authorization: `Bearer ${results[0].access_token}` },
   });
+
+  if (guildRes.status !== 200)
+    return res.status(500).json({ error: "Error while fetching guilds" });
+
   const filteredGuilds = guildRes.data.filter((guild: Guild) => {
     return guild.permissions === 2147483647;
   });
