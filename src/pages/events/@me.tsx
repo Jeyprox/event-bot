@@ -33,7 +33,7 @@ const MyEvents: FunctionComponent = () => {
             <LoadingCircle />
           </div>
         ) : eventError ? (
-          <div>
+          <div className="error-message">
             <FontAwesomeIcon icon={faFrownOpen} />
             <h2>Error: {eventError.message}</h2>
           </div>

@@ -65,7 +65,7 @@ const MyServers: FunctionComponent = () => {
             <LoadingCircle />
           </div>
         ) : guildError ? (
-          <div className={serverStyles.errorMessage}>
+          <div className="error-message">
             <FontAwesomeIcon icon={faFrownOpen} />
             <h2>Error: {guildError.message}</h2>
           </div>

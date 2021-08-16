@@ -29,6 +29,11 @@ const guildHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     return guild.permissions === 2147483647;
   });
 
+  if (!filteredGuilds.length)
+    return res
+      .status(500)
+      .send({ error: "You are currently not part of any guilds." });
+
   await mysql.end();
   res
     .status(200)
