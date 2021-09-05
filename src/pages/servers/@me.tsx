@@ -8,8 +8,7 @@ import { Guild } from "../../common/types";
 import { useSession } from "next-auth/client";
 
 import serverStyles from "../../styles/MyServers.module.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFrownOpen } from "@fortawesome/free-solid-svg-icons";
+import { HiOutlineEmojiSad } from "react-icons/hi";
 import LoadingCircle from "../../components/LoadingCircle";
 
 const MyServers: FunctionComponent = () => {
@@ -66,7 +65,7 @@ const MyServers: FunctionComponent = () => {
           </div>
         ) : guildError ? (
           <div className="error-message">
-            <FontAwesomeIcon icon={faFrownOpen} />
+            <HiOutlineEmojiSad />
             <h2>Error: {guildError.message}</h2>
           </div>
         ) : (

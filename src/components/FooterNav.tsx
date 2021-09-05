@@ -1,49 +1,43 @@
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useRef } from "react";
+import { Fragment } from "react";
 
-import footerStyles from "../styles/FooterStyles.module.scss";
-
-import { faTwitter, faInstagram } from "@fortawesome/free-brands-svg-icons";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FiTwitter, FiInstagram } from "react-icons/fi";
+import { HiChevronDown } from "react-icons/hi";
 
 import { useCookies } from "react-cookie";
 import { useSession } from "next-auth/client";
 import { useRouter } from "next/router";
 
-import { CSSTransition } from "react-transition-group";
+import { Menu, Transition } from "@headlessui/react";
 
 const FooterNav = () => {
-  const transitionRef = useRef(null);
   const router = useRouter();
   const { locale, locales } = router;
 
   const [session, loading] = useSession();
-  const [langDropdown, setLangDropdown] = useState(false);
   const [cookies, setCookie] = useCookies(["NEXT_LOCALE"]);
 
   return (
     <>
-      <div className={footerStyles.footerInfo}>
-        <Link href="/">EventBot</Link>
-        <ul className={footerStyles.socialList}>
-          <li>
+      <div className="text-gray-200">
+        <Link href="/">
+          <a className="text-3xl font-bold">EventBot</a>
+        </Link>
+        <ul className="flex mt-2 mb-8 text-2xl">
+          <li className="mr-4 duration-200 hover:text-blue-500">
             <a href="https://twitter.com/[TODO]">
-              <FontAwesomeIcon icon={faTwitter} />
+              <FiTwitter />
             </a>
           </li>
-          <li>
+          <li className="duration-200 hover:text-blue-500">
             <a href="https://instagram.com/[TODO]">
-              <FontAwesomeIcon icon={faInstagram} />
+              <FiInstagram />
             </a>
           </li>
         </ul>
-        <div className={footerStyles.langSelection}>
-          <div
-            className={footerStyles.langInfo}
-            onClick={() => setLangDropdown(!langDropdown)}
-          >
+        <Menu as="div" className="relative">
+          <Menu.Button className="select-none cursor-pointer flex items-center">
             {locale && (
               <Image
                 src={`/localeIcons/Flag${locale?.toUpperCase()}.svg`}
@@ -53,28 +47,27 @@ const FooterNav = () => {
               />
             )}
 
-            <p>{locale?.toUpperCase()}</p>
-            <FontAwesomeIcon
-              icon={faChevronDown}
-              className={langDropdown ? footerStyles.langArrowOpen : ""}
-            />
-          </div>
-          <CSSTransition
-            nodeRef={transitionRef}
-            in={langDropdown}
-            timeout={250}
-            classNames="drop"
-            unmountOnExit
+            <p className="ml-2 mr-1 text-lg font-semibold">
+              {locale?.toUpperCase()}
+            </p>
+            <HiChevronDown className="text-lg" />
+          </Menu.Button>
+          <Transition
+            as={Fragment}
+            enter="duration-200"
+            enterFrom="-translate-y-5 opacity-0"
+            enterTo="translate-y-0 opacity-100"
+            leave="duration-200"
+            leaveFrom="translate-y-0 opacity-100"
+            leaveTo="-translate-y-5 opacity-0"
           >
-            <div ref={transitionRef} className={footerStyles.langDropdown}>
+            <Menu.Items className="absolute mb-2 left-0 bottom-full w-40 origin-top bg-gray-800 rounded-md shadow">
               {locales?.map((currentLocale) => (
-                <div
-                  className={
-                    currentLocale === locale ? footerStyles.activeLocale : ""
-                  }
+                <Menu.Item
+                  as="div"
+                  className="m-1 p-2 cursor-pointer rounded-md duration-200 flex group hover:bg-gray-700"
                   key={currentLocale}
                   onClick={() => {
-                    setLangDropdown(false);
                     if (currentLocale === locale) return;
                     setCookie("NEXT_LOCALE", currentLocale, { path: "/" });
                     router.push("/", "/", { locale: currentLocale });
@@ -86,17 +79,19 @@ const FooterNav = () => {
                     width={24}
                     height={24}
                   />
-                  <p>{currentLocale.toUpperCase()}</p>
-                </div>
+                  <p className="text-md font-medium ml-2 duration-200 text-gray-300 group-hover:text-gray-200">
+                    {currentLocale.toUpperCase()}
+                  </p>
+                </Menu.Item>
               ))}
-            </div>
-          </CSSTransition>
-        </div>
+            </Menu.Items>
+          </Transition>
+        </Menu>
       </div>
-      <nav className={footerStyles.footerNav}>
-        <div className={footerStyles.navSection}>
-          <h2>Discover</h2>
-          <ul>
+      <nav className="flex">
+        <div>
+          <h2 className="text-xl uppercase font-semibold mb-2">Discover</h2>
+          <ul className="text-gray-300">
             <li>
               <Link href="/events">Events</Link>
             </li>
@@ -109,9 +104,9 @@ const FooterNav = () => {
           </ul>
         </div>
         {session && (
-          <div className={footerStyles.navSection}>
-            <h2>Personal</h2>
-            <ul>
+          <div className="ml-16">
+            <h2 className="text-xl uppercase font-semibold mb-2">Personal</h2>
+            <ul className="text-gray-300">
               <li>
                 <Link href="/events/@me">My Events</Link>
               </li>
@@ -121,9 +116,9 @@ const FooterNav = () => {
             </ul>
           </div>
         )}
-        <div className={footerStyles.navSection}>
-          <h2>Legal</h2>
-          <ul>
+        <div className="ml-16">
+          <h2 className="text-xl uppercase font-semibold mb-2">Legal</h2>
+          <ul className="text-gray-300">
             <li>
               <Link href="/imprint">Imprint</Link>
             </li>

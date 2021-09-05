@@ -1,4 +1,4 @@
-import "../styles/globals.scss";
+import "../styles/globals.css";
 import { AppProps } from "next/app";
 import Layout from "../components/PageLayout";
 import { Provider as AuthProvider } from "next-auth/client";

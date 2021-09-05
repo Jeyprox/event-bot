@@ -9,11 +9,11 @@ interface LayoutProps {
 const PageLayout = ({ children }: LayoutProps) => {
   return (
     <>
-      <header className={layoutStyles.layoutItem}>
+      <header className="max-w-6xl mx-auto">
         <MainNav />
       </header>
-      <main className={layoutStyles.layoutItem}>{children}</main>
-      <footer className={layoutStyles.layoutItem}>
+      <main className="max-w-6xl mx-auto">{children}</main>
+      <footer className="max-w-6xl mx-auto flex justify-between my-10">
         <FooterNav />
       </footer>
     </>
