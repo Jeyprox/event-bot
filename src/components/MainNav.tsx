@@ -23,7 +23,7 @@ const MainNav = () => {
           {navItems.map((item) => (
             <li
               key={item}
-              className="mx-2 text-lg hover:text-gray-400 duration-200"
+              className="mx-4 text-lg hover:text-gray-400 duration-200"
             >
               <Link href={`/${item.toLowerCase()}`}>{item}</Link>
             </li>
@@ -85,7 +85,7 @@ const MainNav = () => {
                     <Menu.Item>
                       <button
                         onClick={() => signOut()}
-                        className="p-2 text-right text-md rounded-md hover:bg-gray-700 duration-200"
+                        className="p-2 text-right text-red-400 text-md rounded-md hover:bg-gray-700 duration-200"
                       >
                         Log Out
                       </button>

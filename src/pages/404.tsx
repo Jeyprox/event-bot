@@ -8,10 +8,16 @@ const Custom404 = () => {
       <Head>
         <title>404 - Page not found</title>
       </Head>
-      <div className={notFound.notFound}>
-        <h1 className={notFound.errorCode}>404</h1>
-        <h1>The page you were looking for could not be found</h1>
-        <Link href="/">Bring me back home</Link>
+      <div className="h-[40em] flex flex-col items-center justify-center">
+        <h1 className="text-5xl my-2 px-6 pb-2 border-b border-gray-700">
+          404
+        </h1>
+        <h1 className="mb-4 text-xl">
+          The page you were looking for could not be found
+        </h1>
+        <Link href="/">
+          <a className="btn-primary text-md">Bring me back home</a>
+        </Link>
       </div>
     </>
   );

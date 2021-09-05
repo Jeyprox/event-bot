@@ -1,9 +1,8 @@
 import { useRouter } from "next/router";
+import React from "react";
 import useSWR from "swr";
 
-import { faFrownOpen } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import ErrorMessage from "../../components/ErrorMessage";
 import LoadingCircle from "../../components/LoadingCircle";
 
 const ServerItem = () => {
@@ -21,10 +20,7 @@ const ServerItem = () => {
       {isValidating ? (
         <LoadingCircle />
       ) : error ? (
-        <div className="error-message">
-          <FontAwesomeIcon icon={faFrownOpen} />
-          <h2>Error: {error.message}</h2>
-        </div>
+        <ErrorMessage errorMessage={error.message} />
       ) : (
         <div>{serverItem?.guildInfo?.name}</div>
       )}

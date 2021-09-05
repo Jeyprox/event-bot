@@ -10,6 +10,7 @@ import { useSession } from "next-auth/client";
 import serverStyles from "../../styles/MyServers.module.scss";
 import { HiOutlineEmojiSad } from "react-icons/hi";
 import LoadingCircle from "../../components/LoadingCircle";
+import ErrorMessage from "../../components/ErrorMessage";
 
 const MyServers: FunctionComponent = () => {
   const router = useRouter();
@@ -57,42 +58,42 @@ const MyServers: FunctionComponent = () => {
       <Head>
         <title>Your Servers</title>
       </Head>
-      <section className={serverStyles.container}>
-        <h1>Select your server</h1>
+      <section className="flex flex-col items-center">
+        <h1 className="text-2xl font-semibold mb-8">Select your server</h1>
         {isValidating ? (
           <div>
             <LoadingCircle />
           </div>
         ) : guildError ? (
-          <div className="error-message">
-            <HiOutlineEmojiSad />
-            <h2>Error: {guildError.message}</h2>
-          </div>
+          <ErrorMessage errorMessage={guildError.message} />
         ) : (
-          <div className={serverStyles.serverList}>
+          <div className="w-2/3 mb-8">
             {guildList?.map((guildItem: Guild) => (
               <div
                 key={guildItem.id}
-                className={serverStyles.serverItem}
+                className="cursor-pointer w-full flex items-center justify-between my-1 px-5 py-3 rounded-md duration-200 hover:bg-gray-800"
                 onClick={() => guildLink(guildItem.id)}
               >
-                <div className={serverStyles.serverInfo}>
+                <div className="flex items-center">
                   {guildItem.icon ? (
                     <Image
+                      className="rounded-full"
                       src={`https://cdn.discordapp.com/icons/${guildItem.id}/${guildItem?.icon}.png`}
                       alt="guild icon"
                       width={48}
                       height={48}
                     />
                   ) : (
-                    <span>{guildItem.name.match(/\b(\w)/g)}</span>
+                    <span className="select-none w-[48px] h-[48px] flex items-center justify-center rounded-full border-2 border-gray-300 text-lg font-semibold">
+                      {guildItem.name.match(/\b(\w)/g)}
+                    </span>
                   )}
-                  <h2>{guildItem.name}</h2>
+                  <h2 className="ml-4 text-lg font-medium">{guildItem.name}</h2>
                 </div>
                 {!botLoading && !isValidating && isActive(guildItem.id) ? (
-                  <button className="btn-primary">Dashboard</button>
+                  <button className="w-32 btn-primary">Dashboard</button>
                 ) : (
-                  <button className={serverStyles.setupBtn}>Set Up</button>
+                  <button className="w-32 btn hover:bg-gray-700">Set Up</button>
                 )}
               </div>
             ))}

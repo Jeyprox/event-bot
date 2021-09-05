@@ -1,7 +1,7 @@
-import loadingStyles from "../styles/components/LoadingCircle.module.scss";
-
 const LoadingCircle = () => {
-  return <div className={loadingStyles.loadingCircle}></div>;
+  return (
+    <div className="animate-spin w-12 h-12 rounded-full border-4 border-gray-800 border-t-gray-700"></div>
+  );
 };
 
 export default LoadingCircle;
