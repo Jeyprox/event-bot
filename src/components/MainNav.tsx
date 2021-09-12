@@ -6,7 +6,7 @@ import { signIn, signOut, useSession } from "next-auth/client";
 
 import { Menu, Transition } from "@headlessui/react";
 
-import { HiChevronDown } from "react-icons/hi";
+import { HiChevronDown, HiOutlineMenuAlt3 } from "react-icons/hi";
 
 const MainNav = () => {
   const [session, loading] = useSession();
@@ -14,12 +14,12 @@ const MainNav = () => {
   const navItems = ["Features", "Events", "Servers"];
 
   return (
-    <nav className="flex items-center justify-between my-4">
+    <nav className="flex items-center justify-between my-4 px-4">
       <div className="text-2xl font-bold">
         <Link href="/">Event Bot</Link>
       </div>
       <div className="flex items-center">
-        <ul className="flex">
+        <ul className="hidden md:flex">
           {navItems.map((item) => (
             <li
               key={item}
@@ -29,10 +29,10 @@ const MainNav = () => {
             </li>
           ))}
         </ul>
-        <div className="ml-5">
+        <div className="ml-6">
           {!session && (
             <button onClick={() => signIn("discord")} className="btn-primary">
-              Log In
+              Login
             </button>
           )}
           {session?.user && (
@@ -68,16 +68,12 @@ const MainNav = () => {
                   <div className="px-1 py-1 flex flex-col items-strech">
                     <Menu.Item>
                       <Link href="/servers/@me">
-                        <a className="p-2 text-right text-md rounded-md hover:bg-gray-700 duration-200">
-                          My Servers
-                        </a>
+                        <a className="dropdown">My Servers</a>
                       </Link>
                     </Menu.Item>
                     <Menu.Item>
                       <Link href="/events/@me">
-                        <a className="p-2 text-right text-md rounded-md hover:bg-gray-700 duration-200">
-                          My Events
-                        </a>
+                        <a className="dropdown-item">My Events</a>
                       </Link>
                     </Menu.Item>
                   </div>
@@ -87,7 +83,7 @@ const MainNav = () => {
                         onClick={() => signOut()}
                         className="p-2 text-right text-red-400 text-md rounded-md hover:bg-gray-700 duration-200"
                       >
-                        Log Out
+                        Logout
                       </button>
                     </Menu.Item>
                   </div>
@@ -96,6 +92,30 @@ const MainNav = () => {
             </Menu>
           )}
         </div>
+        <Menu as="div" className="relative ml-6">
+          <Menu.Button>
+            <HiOutlineMenuAlt3 className="md:hidden text-2xl text-gray-400 cursor-pointer" />
+          </Menu.Button>
+          <Transition
+            as={Fragment}
+            enter="duration-200"
+            enterFrom="-translate-y-5 opacity-0"
+            enterTo="translate-y-0 opacity-100"
+            leave="duration-200"
+            leaveFrom="translate-y-0 opacity-100"
+            leaveTo="-translate-y-5 opacity-0"
+          >
+            <Menu.Items className="dropdown mt-2 w-32">
+              {navItems.map((navItem) => (
+                <div key={navItem} className="p-1 flex flex-col items-strech">
+                  <Menu.Item as="div" className="dropdown-item">
+                    <Link href={`/${navItem.toLowerCase()}`}>{navItem}</Link>
+                  </Menu.Item>
+                </div>
+              ))}
+            </Menu.Items>
+          </Transition>
+        </Menu>
       </div>
     </nav>
   );

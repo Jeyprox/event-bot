@@ -4,7 +4,12 @@ export interface Guild {
   icon: string;
   owner: boolean;
   permissions: number;
-  features: string[];
+}
+
+export interface LandingGuild {
+  name: string;
+  icon: string;
+  memberCount: number;
 }
 
 export interface EventItem {

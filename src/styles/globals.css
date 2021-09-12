@@ -15,4 +15,11 @@
   .btn-primary {
     @apply btn bg-blue-500 hover:bg-blue-600;
   }
+  .dropdown {
+    @apply absolute right-0 origin-top divide-y divide-gray-700 bg-gray-800 rounded-md shadow;
+  }
+
+  .dropdown-item {
+    @apply px-2 py-1.5 text-right text-base rounded-md hover:bg-gray-700 duration-200;
+  }
 }
