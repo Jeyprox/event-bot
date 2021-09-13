@@ -20,7 +20,7 @@ const FooterNav = () => {
 
   return (
     <>
-      <div className="text-gray-200">
+      <div className="text-gray-200 mb-12 sm:mb-0">
         <Link href="/">
           <a className="text-3xl font-bold">EventBot</a>
         </Link>

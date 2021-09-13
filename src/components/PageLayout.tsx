@@ -13,7 +13,7 @@ const PageLayout = ({ children }: LayoutProps) => {
         <MainNav />
       </header>
       <main className="max-w-6xl min-h-[48em] mx-auto">{children}</main>
-      <footer className="max-w-6xl mx-auto flex justify-between my-10 mt-32">
+      <footer className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between px-4 sm:px-8 my-10 mt-32">
         <FooterNav />
       </footer>
     </>
