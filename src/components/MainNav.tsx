@@ -92,7 +92,7 @@ const MainNav = () => {
             </Menu>
           )}
         </div>
-        <Menu as="div" className="relative ml-6">
+        <Menu as="div" className="z-10 ml-6">
           <Menu.Button>
             <HiOutlineMenuAlt3 className="md:hidden text-2xl text-gray-400 cursor-pointer" />
           </Menu.Button>
@@ -105,11 +105,15 @@ const MainNav = () => {
             leaveFrom="translate-y-0 opacity-100"
             leaveTo="-translate-y-5 opacity-0"
           >
-            <Menu.Items className="dropdown w-32">
+            <Menu.Items className="absolute mt-4 py-2 px-8 left-0 origin-top divide-y divide-gray-800 bg-gray-900 rounded-b-md shadow-lg w-full">
               {navItems.map((navItem) => (
                 <div key={navItem} className="p-1 flex flex-col items-strech">
-                  <Menu.Item as="div" className="dropdown-item">
-                    <Link href={`/${navItem.toLowerCase()}`}>{navItem}</Link>
+                  <Menu.Item
+                    as="a"
+                    href={`/${navItem.toLowerCase()}`}
+                    className="px-2 py-1.5 text-left text-lg"
+                  >
+                    {navItem}
                   </Menu.Item>
                 </div>
               ))}
