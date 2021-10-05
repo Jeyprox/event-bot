@@ -16,7 +16,10 @@
     @apply btn bg-blue-500 hover:bg-blue-600;
   }
   .dropdown {
-    @apply absolute right-0 origin-top divide-y divide-gray-700 bg-gray-800 rounded-md shadow;
+    @apply absolute mt-4 right-0 origin-top divide-y divide-gray-700 bg-gray-800 rounded-md shadow;
+  }
+  .dropdown-bottom {
+    @apply absolute mb-4 left-0 bottom-full origin-top divide-y divide-gray-700 bg-gray-800 rounded-md shadow;
   }
 
   .dropdown-item {

@@ -54,18 +54,17 @@ const FooterNav = () => {
           </Menu.Button>
           <Transition
             as={Fragment}
-            enter="duration-200"
+            enter="duration-300"
             enterFrom="-translate-y-5 opacity-0"
             enterTo="translate-y-0 opacity-100"
-            leave="duration-200"
+            leave="duration-300"
             leaveFrom="translate-y-0 opacity-100"
             leaveTo="-translate-y-5 opacity-0"
           >
-            <Menu.Items className="absolute mb-2 left-0 bottom-full w-40 origin-top bg-gray-800 rounded-md shadow">
+            <Menu.Items className="dropdown-bottom w-40">
               {locales?.map((currentLocale) => (
-                <Menu.Item
-                  as="div"
-                  className="m-1 p-2 cursor-pointer rounded-md duration-200 flex group hover:bg-gray-700"
+                <div
+                  className="m-1"
                   key={currentLocale}
                   onClick={() => {
                     if (currentLocale === locale) return;
@@ -73,16 +72,21 @@ const FooterNav = () => {
                     router.push("/", "/", { locale: currentLocale });
                   }}
                 >
-                  <Image
-                    src={`/localeIcons/Flag${currentLocale?.toUpperCase()}.svg`}
-                    alt={`Flag${currentLocale.toUpperCase()}`}
-                    width={24}
-                    height={24}
-                  />
-                  <p className="text-md font-medium ml-2 duration-200 text-gray-300 group-hover:text-gray-200">
-                    {currentLocale.toUpperCase()}
-                  </p>
-                </Menu.Item>
+                  <Menu.Item
+                    as="div"
+                    className="mt-1 p-2 cursor-pointer rounded-md duration-200 flex group hover:bg-gray-700"
+                  >
+                    <Image
+                      src={`/localeIcons/Flag${currentLocale?.toUpperCase()}.svg`}
+                      alt={`Flag${currentLocale.toUpperCase()}`}
+                      width={24}
+                      height={24}
+                    />
+                    <p className="text-md font-medium ml-2 duration-200 text-gray-300 group-hover:text-gray-200">
+                      {currentLocale.toUpperCase()}
+                    </p>
+                  </Menu.Item>
+                </div>
               ))}
             </Menu.Items>
           </Transition>

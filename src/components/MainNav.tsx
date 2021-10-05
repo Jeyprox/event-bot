@@ -57,14 +57,14 @@ const MainNav = () => {
               </Menu.Button>
               <Transition
                 as={Fragment}
-                enter="duration-200"
+                enter="duration-300"
                 enterFrom="-translate-y-5 opacity-0"
                 enterTo="translate-y-0 opacity-100"
-                leave="duration-200"
+                leave="duration-300"
                 leaveFrom="translate-y-0 opacity-100"
                 leaveTo="-translate-y-5 opacity-0"
               >
-                <Menu.Items className="absolute mt-2 right-0 w-40 origin-top divide-y divide-gray-700 bg-gray-800 rounded-md shadow">
+                <Menu.Items className="dropdown w-40">
                   <div className="px-1 py-1 flex flex-col items-strech">
                     <Menu.Item>
                       <Link href="/servers/@me">
@@ -98,14 +98,14 @@ const MainNav = () => {
           </Menu.Button>
           <Transition
             as={Fragment}
-            enter="duration-200"
+            enter="duration-300"
             enterFrom="-translate-y-5 opacity-0"
             enterTo="translate-y-0 opacity-100"
-            leave="duration-200"
+            leave="duration-300"
             leaveFrom="translate-y-0 opacity-100"
             leaveTo="-translate-y-5 opacity-0"
           >
-            <Menu.Items className="dropdown mt-2 w-32">
+            <Menu.Items className="dropdown w-32">
               {navItems.map((navItem) => (
                 <div key={navItem} className="p-1 flex flex-col items-strech">
                   <Menu.Item as="div" className="dropdown-item">

@@ -3,6 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { LandingGuild } from "../common/types";
 import { HiUserGroup } from "react-icons/hi";
+import { motion } from "framer-motion";
+import { landingAnimation } from "../common/animations";
 
 type FeatureProps = {
   title: string;
@@ -19,6 +21,7 @@ type SectionProps = {
 
 type ServerProps = {
   guild: LandingGuild;
+  itemIndex: number;
 };
 
 const MainSection = ({ title, subtitle, children }: SectionProps) => {
@@ -34,7 +37,7 @@ const MainSection = ({ title, subtitle, children }: SectionProps) => {
 const FeatureItem = ({ title, desc, img, rowMultiple }: FeatureProps) => {
   return (
     <div
-      className={`h-full cursor-pointer px-8 py-6 shadow rounded-md bg-gradient-to-tr from-violet-400 to-indigo-500 flex flex-col sm:flex-row items-center justify-between
+      className={`h-full cursor-pointer px-4 py-3 md:px-8 md:py-6 shadow rounded-md bg-gradient-to-tr from-violet-400 to-indigo-500 flex flex-col sm:flex-row items-center justify-between
       ${rowMultiple ? "md:flex-col-reverse md:justify-around" : ""}`}
     >
       <div
@@ -67,9 +70,13 @@ const FeatureItem = ({ title, desc, img, rowMultiple }: FeatureProps) => {
   );
 };
 
-const ServerItem = ({ guild }: ServerProps) => {
+const ServerItem = ({ guild, itemIndex }: ServerProps) => {
   return (
-    <div className="bg-gray-800 rounded-md px-6 py-4 flex items-center">
+    <div
+      className={`hidden ${
+        itemIndex < 4 ? "!flex" : ""
+      } md:flex bg-gray-800 rounded-md px-6 py-4 items-center`}
+    >
       <div className="flex items-center justify-center p-1.5 rounded-md bg-gray-700">
         <Image
           src="/localeIcons/FlagDE.svg"
@@ -142,7 +149,12 @@ const Home = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <section className="flex flex-col items-center text-center justify-center min-h-[35em] md:min-h-[40em] px-4 md:px-0">
+      <motion.section
+        initial="hidden"
+        animate="visible"
+        variants={landingAnimation}
+        className="flex flex-col items-center text-center justify-center min-h-[35em] md:min-h-[40em] px-4 md:px-0"
+      >
         <h1 className="text-4xl md:text-5xl font-bold mb-4 sm:mb-6">
           Plan your next Discord event
         </h1>
@@ -158,7 +170,7 @@ const Home = () => {
             <Link href="/servers/@me">Add to your Server</Link>
           </button>
         </div>
-      </section>
+      </motion.section>
       <MainSection title="Why EventBot?" subtitle="Bringing your ideas to life">
         <div className="w-full sm:w-4/5 lg:w-2/3 grid grid-cols-2 md:grid-cols-3 gap-6">
           <div className="col-span-1 md:row-span-2">
@@ -187,7 +199,11 @@ const Home = () => {
       >
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8">
           {guildList.map((guildItem, i) => (
-            <ServerItem key={i.toString() + guildItem.name} guild={guildItem} />
+            <ServerItem
+              key={i.toString() + guildItem.name}
+              guild={guildItem}
+              itemIndex={i}
+            />
           ))}
         </div>
       </MainSection>
