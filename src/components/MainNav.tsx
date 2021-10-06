@@ -94,7 +94,7 @@ const MainNav = () => {
         </div>
         <Menu as="div" className="z-10 ml-6">
           <Menu.Button>
-            <HiOutlineMenuAlt3 className="md:hidden text-2xl text-gray-400 cursor-pointer" />
+            <HiOutlineMenuAlt3 className="md:hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-200 text-2xl text-gray-400 cursor-pointer" />
           </Menu.Button>
           <Transition
             as={Fragment}
@@ -105,7 +105,7 @@ const MainNav = () => {
             leaveFrom="translate-y-0 opacity-100"
             leaveTo="-translate-y-5 opacity-0"
           >
-            <Menu.Items className="absolute mt-4 py-2 px-8 left-0 origin-top divide-y divide-gray-800 bg-gray-900 rounded-b-md shadow-lg w-full">
+            <Menu.Items className="absolute mt-4 py-2 px-8 left-0 focus:outline-none origin-top divide-y divide-gray-800 bg-gray-900 rounded-b-md shadow-lg w-full">
               {navItems.map((navItem) => (
                 <div key={navItem} className="p-1 flex flex-col items-strech">
                   <Menu.Item
