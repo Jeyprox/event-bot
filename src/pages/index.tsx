@@ -16,6 +16,7 @@ type FeatureProps = {
 type SectionProps = {
   title: string;
   subtitle: string;
+  loadDelay: number;
   children: React.ReactNode;
 };
 
@@ -24,13 +25,24 @@ type ServerProps = {
   itemIndex: number;
 };
 
-const MainSection = ({ title, subtitle, children }: SectionProps) => {
+const MainSection = ({
+  title,
+  subtitle,
+  loadDelay,
+  children,
+}: SectionProps) => {
   return (
-    <section className="w-full px-4 sm:px-8 mb-48 flex flex-col items-center text-center">
+    <motion.section
+      initial="hidden"
+      animate="visible"
+      transition={{ delay: loadDelay, duration: 1 }}
+      variants={landingAnimation}
+      className="w-full px-4 sm:px-8 mb-48 flex flex-col items-center text-center"
+    >
       <h1 className="text-2xl md:text-4xl font-semibold mb-2">{title}</h1>
       <h2 className="text-md md:text-xl text-gray-300 mb-8">{subtitle}</h2>
       {children}
-    </section>
+    </motion.section>
   );
 };
 
@@ -153,6 +165,7 @@ const Home = () => {
         initial="hidden"
         animate="visible"
         variants={landingAnimation}
+        transition={{ delay: 0.1, duration: 1 }}
         className="flex flex-col items-center text-center justify-center min-h-[35em] md:min-h-[40em] px-4 md:px-0"
       >
         <h1 className="text-4xl md:text-5xl font-bold mb-4 sm:mb-6">
@@ -171,7 +184,11 @@ const Home = () => {
           </button>
         </div>
       </motion.section>
-      <MainSection title="Why EventBot?" subtitle="Bringing your ideas to life">
+      <MainSection
+        title="Why EventBot?"
+        loadDelay={0.2}
+        subtitle="Bringing your ideas to life"
+      >
         <div className="w-full sm:w-4/5 lg:w-2/3 grid grid-cols-2 md:grid-cols-3 gap-6">
           <div className="col-span-1 md:row-span-2">
             <FeatureItem
@@ -195,6 +212,7 @@ const Home = () => {
       </MainSection>
       <MainSection
         title="Servers using EventBot"
+        loadDelay={0.3}
         subtitle="Discover all the communities already using the bot to announce events"
       >
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8">
