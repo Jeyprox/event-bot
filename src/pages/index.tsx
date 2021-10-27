@@ -100,8 +100,8 @@ const ServerItem = ({ guild, itemIndex }: ServerProps) => {
       <div className="ml-4">
         <h1 className="text-lg font-semibold">{guild.name}</h1>
         <h1 className="flex items-center text-md text-gray-300">
-          <HiUserGroup className="mr-1" />
-          {guild.memberCount}
+          <HiUserGroup />
+          <p className="ml-1">{guild.memberCount}</p>
         </h1>
       </div>
     </div>
