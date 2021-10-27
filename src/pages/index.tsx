@@ -5,6 +5,9 @@ import { LandingGuild } from "../common/types";
 import { HiUserGroup } from "react-icons/hi";
 import { motion } from "framer-motion";
 import { landingAnimation } from "../common/animations";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { GetStaticProps } from "next";
 
 type FeatureProps = {
   title: string;
@@ -151,6 +154,7 @@ const Home = () => {
       memberCount: 123412,
     },
   ];
+  const { t } = useTranslation("homepage");
   return (
     <>
       <Head>
@@ -169,23 +173,20 @@ const Home = () => {
         className="flex flex-col items-center text-center justify-center min-h-[35em] md:min-h-[40em] px-4 md:px-0"
       >
         <h1 className="text-4xl md:text-5xl font-bold mb-4 sm:mb-6">
-          Plan your next Discord event
+          {t("slogan")}
         </h1>
-        <p className="text-md md:text-lg text-gray-300">
-          Create custom events for your target audience and discover your
-          interests with the event finder.
-        </p>
+        <p className="text-md md:text-lg text-gray-300">{t("sub-slogan")}</p>
         <div className="flex flex-col md:flex-row mt-10">
           <button className="btn-primary mb-2 md:mb-0 text-lg mx-4">
-            <Link href="/events/create">Plan an Event</Link>
+            <Link href="/events/create">{t("plan-event")}</Link>
           </button>
           <button className="btn text-lg mx-4">
-            <Link href="/servers/@me">Add to your Server</Link>
+            <Link href="/servers/@me">{t("add-bot")}</Link>
           </button>
         </div>
       </motion.section>
       <MainSection
-        title="Why EventBot?"
+        title={t("why-eventbot")}
         loadDelay={0.2}
         subtitle="Bringing your ideas to life"
       >
@@ -227,6 +228,14 @@ const Home = () => {
       </MainSection>
     </>
   );
+};
+
+export const getStaticProps: GetStaticProps = async ({ locale = "en" }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["homepage"])),
+    },
+  };
 };
 
 export default Home;
