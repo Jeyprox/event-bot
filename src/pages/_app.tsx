@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 import { AppProps } from "next/app";
 import Layout from "../components/PageLayout";
-import { Provider as AuthProvider } from "next-auth/client";
+import { SessionProvider } from "next-auth/react";
 import { CookiesProvider } from "react-cookie";
 import { appWithTranslation } from "next-i18next";
 import { SWRConfig } from "swr";
@@ -23,13 +23,13 @@ function MyApp({ Component, pageProps }: AppProps) {
     <SWRConfig
       value={{ revalidateOnFocus: false, shouldRetryOnError: false, fetcher }}
     >
-      <AuthProvider session={pageProps.session}>
+      <SessionProvider session={pageProps.session}>
         <CookiesProvider>
           <Layout>
             <Component {...pageProps} />
           </Layout>
         </CookiesProvider>
-      </AuthProvider>
+      </SessionProvider>
     </SWRConfig>
   );
 }

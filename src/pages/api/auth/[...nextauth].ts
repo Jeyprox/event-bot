@@ -1,20 +1,29 @@
 import NextAuth from "next-auth";
-import Providers from "next-auth/providers";
+import DiscordProvider from "next-auth/providers/discord";
 
 export default NextAuth({
   providers: [
-    Providers.Discord({
+    DiscordProvider({
       clientId: process.env.DISCORD_CLIENT_ID,
       clientSecret: process.env.DISCORD_CLIENT_SECRET,
     }),
   ],
   callbacks: {
-    session: async (session, user) => {
-      session.id = user.id;
-
-      return Promise.resolve(session);
+    jwt: ({ token, user }) => {
+      if (user) token.id = user.id;
+      return token;
+    },
+    session: ({ session, token }) => {
+      if (token) session.id = token.id;
+      return session;
     },
   },
-  database: process.env.DATABASE_URL,
+  session: {
+    jwt: true,
+    maxAge: 30 * 24 * 60 * 60,
+  },
+  jwt: {
+    secret: process.env.DISCORD_COOKIE_SECRET,
+  },
   secret: process.env.DISCORD_COOKIE_SECRET,
 });

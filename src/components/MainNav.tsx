@@ -2,14 +2,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { Fragment } from "react";
 
-import { signIn, signOut, useSession } from "next-auth/client";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 import { Menu, Transition } from "@headlessui/react";
 
 import { HiChevronDown, HiOutlineMenuAlt3 } from "react-icons/hi";
 
 const MainNav = () => {
-  const [session, loading] = useSession();
+  const { data: session, status } = useSession();
 
   const navItems = ["Features", "Events", "Servers"];
 
@@ -30,6 +30,7 @@ const MainNav = () => {
           ))}
         </ul>
         <div className="ml-6">
+          {status === "loading" && <h1>Loading</h1>}
           {!session && (
             <button onClick={() => signIn("discord")} className="btn-primary">
               Login

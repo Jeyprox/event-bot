@@ -6,7 +6,7 @@ import { FiTwitter, FiInstagram } from "react-icons/fi";
 import { HiChevronDown } from "react-icons/hi";
 
 import { useCookies } from "react-cookie";
-import { useSession } from "next-auth/client";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 import { Menu, Transition } from "@headlessui/react";
@@ -15,7 +15,7 @@ const FooterNav = () => {
   const router = useRouter();
   const { locale, locales } = router;
 
-  const [session, loading] = useSession();
+  const { data: session } = useSession();
   const [cookies, setCookie] = useCookies(["NEXT_LOCALE"]);
 
   return (
