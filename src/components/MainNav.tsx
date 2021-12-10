@@ -23,7 +23,7 @@ const MainNav = () => {
           {navItems.map((item) => (
             <li
               key={item}
-              className="mx-4 text-lg hover:text-gray-400 duration-200"
+              className="mx-2 px-3 py-1.5 rounded text-lg hover:bg-gray-800 duration-200"
             >
               <Link href={`/${item.toLowerCase()}`}>{item}</Link>
             </li>
@@ -38,18 +38,16 @@ const MainNav = () => {
           )}
           {session?.user && (
             <Menu as="div" className="relative">
-              <Menu.Button className="select-none cursor-pointer flex items-center">
+              <Menu.Button className="select-none cursor-pointer flex items-center duration-200 hover:bg-gray-800 px-2 py-1.5 rounded">
                 {session.user?.image && (
-                  <div>
-                    <Image
-                      className="rounded-full"
-                      src={session.user.image}
-                      alt="avatar"
-                      width={32}
-                      height={32}
-                      layout="fixed"
-                    />
-                  </div>
+                  <Image
+                    className="rounded-full"
+                    src={session.user.image}
+                    alt="avatar"
+                    width={32}
+                    height={32}
+                    layout="fixed"
+                  />
                 )}
                 <p className="text-lg font-semibold ml-2 mx-1">
                   {session.user.name}
@@ -66,10 +64,10 @@ const MainNav = () => {
                 leaveTo="-translate-y-5 opacity-0"
               >
                 <Menu.Items className="dropdown w-40">
-                  <div className="px-1 py-1 flex flex-col items-strech">
+                  <div className="p-1 flex flex-col">
                     <Menu.Item>
                       <Link href="/servers/@me">
-                        <a className="dropdown">My Servers</a>
+                        <a className="dropdown-item">My Servers</a>
                       </Link>
                     </Menu.Item>
                     <Menu.Item>
@@ -78,7 +76,7 @@ const MainNav = () => {
                       </Link>
                     </Menu.Item>
                   </div>
-                  <div className="px-1 py-1 flex flex-col items-stretch">
+                  <div className="p-1 flex flex-col">
                     <Menu.Item>
                       <button
                         onClick={() => signOut()}

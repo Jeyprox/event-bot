@@ -16,13 +16,13 @@
     @apply btn bg-blue-500 hover:bg-blue-600;
   }
   .dropdown {
-    @apply absolute mt-4 right-0 origin-top divide-y divide-gray-700 bg-gray-800 rounded-md shadow;
+    @apply absolute mt-2 right-0 origin-top divide-y divide-gray-700 bg-gray-800 rounded-md shadow;
   }
   .dropdown-bottom {
-    @apply absolute mb-4 left-0 bottom-full origin-top divide-y divide-gray-700 bg-gray-800 rounded-md shadow;
+    @apply absolute mb-2 left-0 bottom-full origin-top divide-y divide-gray-700 bg-gray-800 rounded-md shadow;
   }
 
   .dropdown-item {
-    @apply px-2 py-1.5 text-right text-base rounded-md hover:bg-gray-700 duration-200;
+    @apply p-2 text-right text-base rounded-md hover:bg-gray-700 duration-200;
   }
 }

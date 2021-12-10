@@ -21,7 +21,9 @@ const fetcher = async (url: string) => {
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <SWRConfig
-      value={{ revalidateOnFocus: false, shouldRetryOnError: false, fetcher }}
+      value={{
+        fetcher,
+      }}
     >
       <SessionProvider session={pageProps.session}>
         <CookiesProvider>

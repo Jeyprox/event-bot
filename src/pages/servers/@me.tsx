@@ -2,31 +2,30 @@ import { FunctionComponent } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import Image from "next/image";
-import useSWR from "swr";
+import useSWRImmutable from "swr/immutable";
 
 import { Guild } from "../../common/types";
-import { useSession } from "next-auth/client";
+import { useSession } from "next-auth/react";
 
-import serverStyles from "../../styles/MyServers.module.scss";
-import { HiOutlineEmojiSad } from "react-icons/hi";
 import LoadingCircle from "../../components/LoadingCircle";
 import ErrorMessage from "../../components/ErrorMessage";
 
 const MyServers: FunctionComponent = () => {
   const router = useRouter();
-  const [session] = useSession();
+  const { data: session } = useSession();
+
   const {
     data: guildList,
     error: guildError,
     isValidating,
-  } = useSWR(() =>
-    session ? "/api/guilds/guildList?userId=" + session?.id : null
+  } = useSWRImmutable(() =>
+    session ? "/api/guilds/guildList?userId=" + session?.userId : null
   );
   const {
     data: botList,
     error: botError,
     isValidating: botLoading,
-  } = useSWR("/api/guilds/activeGuilds");
+  } = useSWRImmutable("/api/guilds/activeGuilds");
 
   const guildLink = (guildId: string) => {
     if (isActive(guildId)) router.push(`/servers/${guildId}`);
@@ -58,8 +57,8 @@ const MyServers: FunctionComponent = () => {
       <Head>
         <title>Your Servers</title>
       </Head>
-      <section className="flex flex-col items-center">
-        <h1 className="text-2xl font-semibold mb-8">Select your server</h1>
+      <section className="flex flex-col items-center my-16">
+        <h1 className="text-3xl font-bold mb-8">Select your server</h1>
         {isValidating ? (
           <div>
             <LoadingCircle />
@@ -67,12 +66,11 @@ const MyServers: FunctionComponent = () => {
         ) : guildError ? (
           <ErrorMessage errorMessage={guildError.message} />
         ) : (
-          <div className="w-2/3 mb-8">
+          <div className="w-4/5 grid grid-cols-2 gap-4">
             {guildList?.map((guildItem: Guild) => (
               <div
                 key={guildItem.id}
-                className="cursor-pointer w-full flex items-center justify-between my-1 px-5 py-3 rounded-md duration-200 hover:bg-gray-800"
-                onClick={() => guildLink(guildItem.id)}
+                className="select-none flex items-center justify-between my-1 px-5 py-3"
               >
                 <div className="flex items-center">
                   {guildItem.icon ? (
@@ -91,9 +89,19 @@ const MyServers: FunctionComponent = () => {
                   <h2 className="ml-4 text-lg font-medium">{guildItem.name}</h2>
                 </div>
                 {!botLoading && !isValidating && isActive(guildItem.id) ? (
-                  <button className="w-32 btn-primary">Dashboard</button>
+                  <button
+                    onClick={() => guildLink(guildItem.id)}
+                    className="w-32 btn-primary"
+                  >
+                    Dashboard
+                  </button>
                 ) : (
-                  <button className="w-32 btn hover:bg-gray-700">Set Up</button>
+                  <button
+                    onClick={() => guildLink(guildItem.id)}
+                    className="w-24 btn bg-gray-800 hover:bg-gray-700"
+                  >
+                    Setup
+                  </button>
                 )}
               </div>
             ))}

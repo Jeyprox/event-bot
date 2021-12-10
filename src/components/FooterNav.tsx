@@ -25,19 +25,19 @@ const FooterNav = () => {
           <a className="text-3xl font-bold">EventBot</a>
         </Link>
         <ul className="flex mt-2 mb-8 text-2xl">
-          <li className="mr-4 duration-200 hover:text-blue-500">
+          <li className="mr-4 duration-200 hover:bg-gray-800 rounded">
             <a href="https://twitter.com/[TODO]">
-              <FiTwitter />
+              <FiTwitter className="m-2" />
             </a>
           </li>
-          <li className="duration-200 hover:text-blue-500">
+          <li className="duration-200 hover:bg-gray-800 rounded">
             <a href="https://instagram.com/[TODO]">
-              <FiInstagram />
+              <FiInstagram className="m-2" />
             </a>
           </li>
         </ul>
         <Menu as="div" className="relative">
-          <Menu.Button className="select-none cursor-pointer flex items-center">
+          <Menu.Button className="px-2 py-1.5 rounded-md select-none cursor-pointer flex items-center hover:bg-gray-800 duration-200">
             {locale && (
               <Image
                 src={`/localeIcons/Flag${locale?.toUpperCase()}.svg`}

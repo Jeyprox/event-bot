@@ -1,4 +1,3 @@
-import layoutStyles from "../styles/PageLayout.module.scss";
 import MainNav from "./MainNav";
 import FooterNav from "./FooterNav";
 

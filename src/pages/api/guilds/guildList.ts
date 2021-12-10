@@ -2,6 +2,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
 import { Guild } from "../../../common/types";
 
+import { getToken } from "next-auth/jwt";
+
 const mysql = require("serverless-mysql")({
   config: {
     host: process.env.DB_HOST,
@@ -11,19 +13,18 @@ const mysql = require("serverless-mysql")({
   },
 });
 
+const tokenSecret = process.env.DISCORD_JWT_SECRET;
+
 const guildHandler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const userId = req.query.userId;
-  if (!userId) return res.status(500).send({ error: "No user specified" });
-  if (isNaN(Number(userId)))
-    return res.status(500).send({ error: "UserId is not a number" });
-  const results = await mysql.query(
-    `SELECT access_token FROM accounts WHERE user_id = ${userId}`
-  );
-  if (!results.length)
-    return res.status(500).json({ error: "No account found" });
+  const token = await getToken({
+    req,
+    secret: tokenSecret!,
+  });
+
+  if (!token) return null;
 
   const guildRes = await axios.get("https://discord.com/api/users/@me/guilds", {
-    headers: { Authorization: `Bearer ${results[0].access_token}` },
+    headers: { Authorization: `Bearer ${token!.accessToken}` },
   });
 
   if (guildRes.status !== 200)
@@ -37,8 +38,6 @@ const guildHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res
       .status(500)
       .send({ error: "You are currently not part of any guilds." });
-
-  await mysql.end();
   res
     .status(200)
     .json(
