@@ -92,7 +92,7 @@ const ServerItem = ({ guild, itemIndex }: ServerProps) => {
         itemIndex < 4 ? "!flex" : ""
       } md:flex bg-gray-800 rounded-md px-6 py-4 items-center`}
     >
-      <div className="flex items-center justify-center p-1.5 rounded-md bg-gray-700">
+      <div className="flex items-center justify-center">
         <Image
           src="/localeIcons/FlagDE.svg"
           width={48}
@@ -113,26 +113,6 @@ const ServerItem = ({ guild, itemIndex }: ServerProps) => {
 
 const Home = () => {
   const guildList = [
-    {
-      name: "Test Server",
-      icon: "guildIcon",
-      memberCount: 123412,
-    },
-    {
-      name: "Test Server",
-      icon: "guildIcon",
-      memberCount: 123412,
-    },
-    {
-      name: "Test Server",
-      icon: "guildIcon",
-      memberCount: 123412,
-    },
-    {
-      name: "Test Server",
-      icon: "guildIcon",
-      memberCount: 123412,
-    },
     {
       name: "Test Server",
       icon: "guildIcon",

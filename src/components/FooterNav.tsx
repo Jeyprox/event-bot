@@ -25,7 +25,7 @@ const FooterNav = () => {
           <a className="text-3xl font-bold">EventBot</a>
         </Link>
         <ul className="flex mt-2 mb-8 text-2xl">
-          <li className="mr-4 duration-200 hover:bg-gray-800 rounded">
+          <li className="mr-2 duration-200 hover:bg-gray-800 rounded">
             <a href="https://twitter.com/[TODO]">
               <FiTwitter className="m-2" />
             </a>

@@ -3,16 +3,14 @@ import Head from "next/head";
 import Link from "next/link";
 import useSWR from "swr";
 
-import { useSession } from "next-auth/client";
-
-import eventStyles from "../../styles/MyEvents.module.scss";
+import { useSession } from "next-auth/react";
 
 import { EventItem } from "../../common/types";
 import LoadingCircle from "../../components/LoadingCircle";
 import ErrorMessage from "../../components/ErrorMessage";
 
 const MyEvents: FunctionComponent = () => {
-  const [session] = useSession();
+  const { data: session } = useSession();
   const {
     data: eventList,
     error: eventError,

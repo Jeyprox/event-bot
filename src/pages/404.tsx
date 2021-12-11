@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Head from "next/head";
 import Image from "next/image";
-import notFound from "../styles/Custom404.module.scss";
 
 const Custom404 = () => {
   return (
