@@ -31,12 +31,11 @@ const MainNav = () => {
         </ul>
         <div className="ml-6">
           {status === "loading" && <h1>Loading</h1>}
-          {!session ||
-            (status === "loading" && (
-              <button onClick={() => signIn("discord")} className="btn-primary">
-                Login
-              </button>
-            ))}
+          {!session && (
+            <button onClick={() => signIn("discord")} className="btn-primary">
+              Login
+            </button>
+          )}
           {session?.user && (
             <Menu as="div" className="relative">
               <Menu.Button className="select-none cursor-pointer flex items-center duration-200 hover:bg-gray-800 px-2 py-1.5 rounded">
