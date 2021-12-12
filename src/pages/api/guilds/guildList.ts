@@ -12,7 +12,10 @@ const guildHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     secret: tokenSecret!,
   });
 
-  if (!token) return null;
+  if (!token)
+    return res
+      .status(500)
+      .json({ error: "No valid token for fetching guilds" });
 
   const guildRes = await axios.get("https://discord.com/api/users/@me/guilds", {
     headers: { Authorization: `Bearer ${token!.accessToken}` },
