@@ -20,22 +20,24 @@ const FooterNav = () => {
 
   return (
     <>
-      <div className="text-gray-200 mb-12 sm:mb-0">
-        <Link href="/">
-          <a className="text-3xl font-bold">EventBot</a>
-        </Link>
-        <ul className="flex mt-2 mb-8 text-2xl">
-          <li className="mr-2 duration-200 hover:bg-gray-800 rounded">
-            <a href="https://twitter.com/[TODO]">
-              <FiTwitter className="m-2" />
-            </a>
-          </li>
-          <li className="duration-200 hover:bg-gray-800 rounded">
-            <a href="https://instagram.com/[TODO]">
-              <FiInstagram className="m-2" />
-            </a>
-          </li>
-        </ul>
+      <div className="text-gray-200 mb-12 sm:mb-0 flex flex-col gap-y-8">
+        <div className="flex flex-col gap-y-2">
+          <Link href="/">
+            <a className="text-3xl font-bold">EventBot</a>
+          </Link>
+          <ul className="flex gap-x-2 text-2xl">
+            <li className="duration-200 hover:bg-gray-800 rounded">
+              <a href="https://twitter.com/[TODO]">
+                <FiTwitter className="m-2" />
+              </a>
+            </li>
+            <li className="duration-200 hover:bg-gray-800 rounded">
+              <a href="https://instagram.com/[TODO]">
+                <FiInstagram className="m-2" />
+              </a>
+            </li>
+          </ul>
+        </div>
         <Menu as="div" className="relative">
           <Menu.Button className="px-2 py-1.5 rounded-md select-none cursor-pointer flex items-center hover:bg-gray-800 duration-200">
             {locale && (
@@ -61,7 +63,7 @@ const FooterNav = () => {
             leaveFrom="translate-y-0 opacity-100"
             leaveTo="-translate-y-5 opacity-0"
           >
-            <Menu.Items className="dropdown-bottom w-40">
+            <Menu.Items className="dropdown mb-2 left-0 bottom-full w-40">
               {locales?.map((currentLocale) => (
                 <div
                   className="m-1"
@@ -92,9 +94,9 @@ const FooterNav = () => {
           </Transition>
         </Menu>
       </div>
-      <nav className="flex">
-        <div>
-          <h2 className="text-xl uppercase font-semibold mb-2">Discover</h2>
+      <nav className="flex gap-x-16">
+        <div className="flex flex-col gap-y-2">
+          <h2 className="text-xl uppercase font-semibold">Discover</h2>
           <ul className="text-gray-300">
             <li>
               <Link href="/events">Events</Link>
@@ -108,8 +110,8 @@ const FooterNav = () => {
           </ul>
         </div>
         {session && (
-          <div className="ml-16">
-            <h2 className="text-xl uppercase font-semibold mb-2">Personal</h2>
+          <div className="flex flex-col gap-y-2">
+            <h2 className="text-xl uppercase font-semibold">Personal</h2>
             <ul className="text-gray-300">
               <li>
                 <Link href="/events/@me">My Events</Link>
@@ -120,8 +122,8 @@ const FooterNav = () => {
             </ul>
           </div>
         )}
-        <div className="ml-16">
-          <h2 className="text-xl uppercase font-semibold mb-2">Legal</h2>
+        <div className="flex flex-col gap-y-2">
+          <h2 className="text-xl uppercase font-semibold">Legal</h2>
           <ul className="text-gray-300">
             <li>
               <Link href="/imprint">Imprint</Link>

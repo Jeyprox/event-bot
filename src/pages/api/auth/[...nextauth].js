@@ -1,17 +1,13 @@
 import NextAuth from "next-auth";
-import { JWT } from "next-auth/jwt";
 import DiscordProvider from "next-auth/providers/discord";
-import { SessionProvider } from "next-auth/react";
 
-async function refreshAccessToken(token: JWT) {
+async function refreshAccessToken(token) {
   try {
-    const url = "https://discord.com/api/v8/oauth2/token?";
-    // new URLSearchParams({
-    //   client_id: process.env.DISCORD_CLIENT_ID,
-    //   client_secret: process.env.DISCORD_CLIENT_SECRET,
-    //   grant_type: "refresh_token",
-    //   refresh_token: token.refreshToken,
-    // });
+    const url =
+      "https://discord.com/api/v8/oauth2/token?" +
+      new URLSearchParams(
+        `client_id=${process.env.DISCORD_CLIENT_ID}&client_secret=${process.env.DISCORD_CLIENT_SECRET}&grant_type=refresh_token&refresh_token=${token.refreshToken}`
+      );
 
     const response = await fetch(url, {
       headers: {
@@ -54,16 +50,14 @@ export default NextAuth({
           accessToken: account.access_token,
           refreshToken: account.refresh_token,
           userId: user.id,
-          accessTokenExpires: Date.now() + account.expires_at! * 1000,
+          accessTokenExpires: Date.now() + account.expires_at * 1000,
         };
       }
-
-      // if (Date.now() < token.accessTokenExpires) {
-      //   return token;
-      // }
-
-      return token;
-      // return await refreshAccessToken(token);
+      //check if token is expired
+      if (Date.now() < token.accessTokenExpires) {
+        return token;
+      }
+      return refreshAccessToken(token);
     },
     session: ({ session, token }) => {
       if (token) {

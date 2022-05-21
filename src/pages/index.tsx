@@ -40,10 +40,12 @@ const MainSection = ({
       animate="visible"
       transition={{ delay: loadDelay, duration: 1 }}
       variants={landingAnimation}
-      className="w-full px-4 sm:px-8 mb-48 flex flex-col items-center text-center"
+      className="w-full px-4 sm:px-8 mb-48 grid gap-y-8 place-items-center text-center"
     >
-      <h1 className="text-2xl md:text-4xl font-semibold mb-2">{title}</h1>
-      <h2 className="text-md md:text-xl text-gray-300 mb-8">{subtitle}</h2>
+      <div className="grid gap-y-2">
+        <h1 className="text-2xl md:text-4xl font-semibold">{title}</h1>
+        <h2 className="text-md md:text-xl text-gray-300">{subtitle}</h2>
+      </div>
       {children}
     </motion.section>
   );
@@ -52,12 +54,16 @@ const MainSection = ({
 const FeatureItem = ({ title, desc, img, rowMultiple }: FeatureProps) => {
   return (
     <div
-      className={`h-full cursor-pointer px-4 py-3 md:px-8 md:py-6 shadow rounded-md bg-gradient-to-tr from-violet-400 to-indigo-500 flex flex-col sm:flex-row items-center justify-between
-      ${rowMultiple ? "md:flex-col-reverse md:justify-around" : ""}`}
+      className={`h-full cursor-pointer px-4 py-3 md:px-8 md:py-6 shadow rounded-md bg-gradient-to-tr from-violet-400 to-indigo-500 duration-200 hover:-translate-y-1 flex items-center
+      ${
+        rowMultiple
+          ? "md:flex-col-reverse md:justify-around"
+          : "justify-between flex-col sm:flex-row"
+      }`}
     >
       <div
-        className={`flex flex-col text-center sm:text-left items-center sm:items-start ${
-          rowMultiple ? "md:items-center md:text-center" : ""
+        className={`flex flex-col text-center sm:text-left items-center mr-0 ${
+          rowMultiple ? "md:text-center items-center" : "mr-6 sm:items-start"
         }`}
       >
         <h1 className="text-xl md:text-2xl font-semibold sm:mb-1 md:mb-2">
@@ -156,11 +162,11 @@ const Home = () => {
           {t("slogan")}
         </h1>
         <p className="text-md md:text-lg text-gray-300">{t("sub-slogan")}</p>
-        <div className="flex flex-col md:flex-row mt-10">
-          <button className="btn-primary mb-2 md:mb-0 text-lg mx-4">
+        <div className="flex flex-col md:flex-row mt-10 gap-x-8">
+          <button className="btn-primary mb-2 md:mb-0 text-lg">
             <Link href="/events/create">{t("plan-event")}</Link>
           </button>
-          <button className="btn text-lg mx-4">
+          <button className="btn text-lg">
             <Link href="/servers/@me">{t("add-bot")}</Link>
           </button>
         </div>
@@ -168,13 +174,13 @@ const Home = () => {
       <MainSection
         title={t("why-eventbot")}
         loadDelay={0.2}
-        subtitle="Bringing your ideas to life"
+        subtitle={t("sub-why-eventbot")}
       >
-        <div className="w-full sm:w-4/5 lg:w-2/3 grid grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="w-full sm:w-4/5 lg:w-3/4 grid grid-cols-2 md:grid-cols-3 gap-6">
           <div className="col-span-1 md:row-span-2">
             <FeatureItem
               title="Creating Events"
-              desc="Test"
+              desc="Plan the next big event on your server"
               img="CreateEvent"
               rowMultiple
             />
@@ -182,12 +188,16 @@ const Home = () => {
           <div className="col-span-1 md:col-span-2">
             <FeatureItem
               title="Discovering Servers"
-              desc="Test"
+              desc="Find new servers with your favourite events"
               img="DiscoverServers"
             />
           </div>
           <div className="col-span-2">
-            <FeatureItem title="Find Events" desc="Test" img="SearchEvent" />
+            <FeatureItem
+              title="Find Events"
+              desc="Search for your interests and all the planned events"
+              img="SearchEvent"
+            />
           </div>
         </div>
       </MainSection>

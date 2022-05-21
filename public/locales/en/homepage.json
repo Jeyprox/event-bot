@@ -1,7 +1,8 @@
 {
-    "slogan": "Plan your next discord event",
-    "sub-slogan": "Create custom events for your target audience and discover your interests with the event finder.",
-    "plan-event": "Plan an Event",
-    "add-bot": "Add to your Server",
-    "why-eventbot": "Why EventBot?"
+  "slogan": "Plan your next discord event",
+  "sub-slogan": "Create custom events for your target audience and discover your interests with the event finder.",
+  "plan-event": "Plan an Event",
+  "add-bot": "Add to your Server",
+  "why-eventbot": "Why EventBot?",
+  "sub-why-eventbot": "Bringing your ideas to life"
 }

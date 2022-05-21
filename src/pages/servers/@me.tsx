@@ -59,18 +59,20 @@ const MyServers: FunctionComponent = () => {
       </Head>
       <section className="flex flex-col items-center my-16">
         <h1 className="text-3xl font-bold mb-8">Select your server</h1>
-        {isValidating ? (
+        {isValidating || botLoading ? (
           <div>
             <LoadingCircle />
           </div>
-        ) : guildError ? (
-          <ErrorMessage errorMessage={guildError.message} />
+        ) : guildError || botError ? (
+          <ErrorMessage
+            errorMessage={guildError.message || "Error loading guilds"}
+          />
         ) : (
-          <div className="w-4/5 grid grid-cols-2 gap-4">
+          <div className="w-4/5 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
             {guildList?.map((guildItem: Guild) => (
               <div
                 key={guildItem.id}
-                className="select-none flex items-center justify-between my-1 px-5 py-3"
+                className="select-none flex gap-x-2 items-center justify-between"
               >
                 <div className="flex items-center">
                   {guildItem.icon ? (
@@ -88,21 +90,15 @@ const MyServers: FunctionComponent = () => {
                   )}
                   <h2 className="ml-4 text-lg font-medium">{guildItem.name}</h2>
                 </div>
-                {!botLoading && !isValidating && isActive(guildItem.id) ? (
-                  <button
-                    onClick={() => guildLink(guildItem.id)}
-                    className="w-32 btn-primary"
-                  >
-                    Dashboard
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => guildLink(guildItem.id)}
-                    className="w-24 btn bg-gray-800 hover:bg-gray-700"
-                  >
-                    Setup
-                  </button>
-                )}
+                <button
+                  className={`w-24 ${
+                    isActive(guildItem.id)
+                      ? "btn-primary"
+                      : "btn bg-gray-800 hover:bg-gray-700"
+                  }`}
+                >
+                  {isActive(guildItem.id) ? "Go" : "Setup"}
+                </button>
               </div>
             ))}
           </div>
