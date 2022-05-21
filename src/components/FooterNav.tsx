@@ -20,7 +20,7 @@ const FooterNav = () => {
 
   return (
     <>
-      <div className="text-gray-200 mb-12 sm:mb-0 flex flex-col gap-y-8">
+      <div className="text-gray-200 sm:mb-0 flex flex-row sm:flex-col gap-8">
         <div className="flex flex-col gap-y-2">
           <Link href="/">
             <a className="text-3xl font-bold">EventBot</a>
@@ -94,7 +94,7 @@ const FooterNav = () => {
           </Transition>
         </Menu>
       </div>
-      <nav className="flex gap-x-16">
+      <nav className="flex flex-wrap gap-x-16 gap-y-8">
         <div className="flex flex-col gap-y-2">
           <h2 className="text-xl uppercase font-semibold">Discover</h2>
           <ul className="text-gray-300">

@@ -6,6 +6,15 @@ export interface Guild {
   permissions: number;
 }
 
+export interface UserGuild {
+  id: string;
+  name: string;
+  icon: string;
+  owner: boolean;
+  permissions: number;
+  hasBot: boolean;
+}
+
 export interface LandingGuild {
   name: string;
   icon: string;

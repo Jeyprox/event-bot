@@ -1,15 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import axios from "axios";
-import { Guild } from "../../../common/types";
+import { Guild, UserGuild } from "../../../common/types";
 
 import { getToken } from "next-auth/jwt";
-
-const tokenSecret = process.env.DISCORD_JWT_SECRET;
 
 const guildHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const token = await getToken({
     req,
-    secret: tokenSecret!,
+    secret: process.env.DISCORD_JWT_SECRET,
   });
 
   if (!token)
@@ -17,14 +14,16 @@ const guildHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       .status(500)
       .json({ error: "No valid token for fetching guilds" });
 
-  const guildRes = await axios.get("https://discord.com/api/users/@me/guilds", {
-    headers: { Authorization: `Bearer ${token!.accessToken}` },
+  const guildRes = await fetch("https://discord.com/api/users/@me/guilds", {
+    headers: { Authorization: `Bearer ${token.accessToken}` },
   });
 
-  if (guildRes.status !== 200)
+  if (!guildRes.ok)
     return res.status(500).json({ error: "Error while fetching guilds" });
 
-  const filteredGuilds = guildRes.data.filter((guild: Guild) => {
+  const guildList: Guild[] = await guildRes.json();
+
+  const filteredGuilds = guildList.filter((guild: Guild) => {
     return guild.permissions === 2147483647;
   });
 
@@ -32,11 +31,29 @@ const guildHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res
       .status(500)
       .send({ error: "You are currently not part of any guilds." });
-  res
-    .status(200)
-    .json(
-      filteredGuilds.sort((a: Guild, b: Guild) => a.name.localeCompare(b.name))
-    );
+
+  const botGuildsData = await fetch(
+    "https://discord.com/api/users/@me/guilds",
+    {
+      headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` },
+    }
+  );
+  const botGuilds = await botGuildsData.json();
+
+  const finalGuildList: UserGuild[] = filteredGuilds.map((guild: Guild) => {
+    let isBotInGuild = false;
+    if (botGuilds.length && botGuilds.find((g: Guild) => g.id === guild.id))
+      isBotInGuild = true;
+    return { ...guild, hasBot: isBotInGuild };
+  });
+  return res.status(200).json(
+    finalGuildList.sort((a: UserGuild, b: UserGuild) => {
+      return (
+        (a.hasBot === b.hasBot ? 0 : a.hasBot ? -1 : 1) ||
+        a.name.localeCompare(b.name)
+      );
+    })
+  );
 };
 
 export default guildHandler;

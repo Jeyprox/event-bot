@@ -14,11 +14,11 @@ const MainNav = () => {
   const navItems = ["Features", "Events", "Servers"];
 
   return (
-    <nav className="flex items-center justify-between my-4 px-4">
+    <nav className="flex items-center justify-between my-4 px-4 relative">
       <div className="text-2xl font-bold">
         <Link href="/">Event Bot</Link>
       </div>
-      <div className="flex items-center">
+      <div className="flex items-center gap-x-6">
         <ul className="hidden md:flex">
           {navItems.map((item) => (
             <li
@@ -29,7 +29,7 @@ const MainNav = () => {
             </li>
           ))}
         </ul>
-        <div className="ml-6">
+        <div>
           {status === "loading" && <h1>Loading</h1>}
           {!session && (
             <button onClick={() => signIn("discord")} className="btn-primary">
@@ -49,7 +49,7 @@ const MainNav = () => {
                     layout="fixed"
                   />
                 )}
-                <p className="text-lg font-semibold ml-2 mx-1">
+                <p className="hidden sm:block text-lg font-semibold ml-2 mx-1">
                   {session.user.name}
                 </p>
                 <HiChevronDown className="text-2xl" />
@@ -65,15 +65,19 @@ const MainNav = () => {
               >
                 <Menu.Items className="dropdown w-40">
                   <div className="p-1 flex flex-col">
-                    <Menu.Item>
-                      <Link href="/servers/@me">
-                        <a className="dropdown-item">My Servers</a>
-                      </Link>
+                    <Menu.Item
+                      as="a"
+                      href="/servers/@me"
+                      className="dropdown-item"
+                    >
+                      My Servers
                     </Menu.Item>
-                    <Menu.Item>
-                      <Link href="/events/@me">
-                        <a className="dropdown-item">My Events</a>
-                      </Link>
+                    <Menu.Item
+                      as="a"
+                      href="/events/@me"
+                      className="dropdown-item"
+                    >
+                      My Events
                     </Menu.Item>
                   </div>
                   <div className="p-1 flex flex-col">
@@ -91,7 +95,7 @@ const MainNav = () => {
             </Menu>
           )}
         </div>
-        <Menu as="div" className="z-10 ml-6">
+        <Menu>
           <Menu.Button>
             <HiOutlineMenuAlt3 className="md:hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-200 text-2xl text-gray-400 cursor-pointer" />
           </Menu.Button>
@@ -104,7 +108,7 @@ const MainNav = () => {
             leaveFrom="translate-y-0 opacity-100"
             leaveTo="-translate-y-5 opacity-0"
           >
-            <Menu.Items className="absolute mt-4 py-2 px-8 left-0 focus:outline-none origin-top divide-y divide-gray-800 bg-gray-900 rounded-b-md shadow-lg w-full">
+            <Menu.Items className="absolute top-full mt-4 py-2 px-8 left-0 focus:outline-none origin-top divide-y divide-gray-800 bg-gray-900 rounded-b-md shadow-lg w-full">
               {navItems.map((navItem) => (
                 <div key={navItem} className="p-1 flex flex-col items-strech">
                   <Menu.Item
