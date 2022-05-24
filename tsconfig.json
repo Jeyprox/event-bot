@@ -19,7 +19,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src/pages/api/auth/[...nextauth].js"
+    "src/pages/api/auth/[...nextauth].js",
+    "src/lib/prisma.js"
   ],
   "exclude": ["node_modules"]
 }

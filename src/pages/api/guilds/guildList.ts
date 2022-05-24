@@ -32,13 +32,10 @@ const guildHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       .status(500)
       .send({ error: "You are currently not part of any guilds." });
 
-  const botGuildsData = await fetch(
-    "https://discord.com/api/users/@me/guilds",
-    {
-      headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` },
-    }
-  );
-  const botGuilds = await botGuildsData.json();
+  const botRes = await fetch("https://discord.com/api/users/@me/guilds", {
+    headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` },
+  });
+  const botGuilds = await botRes.json();
 
   const finalGuildList: UserGuild[] = filteredGuilds.map((guild: Guild) => {
     let isBotInGuild = false;
