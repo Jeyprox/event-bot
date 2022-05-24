@@ -9,6 +9,9 @@
 }
 
 @layer utilities {
+  .nav-item {
+    @apply flex items-center gap-x-2 cursor-pointer px-3 py-1.5 rounded hover:bg-gray-800 duration-200;
+  }
   .btn {
     @apply py-2 px-4 rounded-md hover:bg-gray-800 duration-300;
   }

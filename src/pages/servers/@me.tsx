@@ -1,7 +1,6 @@
 import { FunctionComponent } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import Image from "next/image";
 import useSWRImmutable from "swr/immutable";
 
 import { UserGuild } from "../../common/types";
@@ -9,6 +8,7 @@ import { useSession } from "next-auth/react";
 
 import LoadingCircle from "../../components/LoadingCircle";
 import ErrorMessage from "../../components/ErrorMessage";
+import { GuildIcon } from "../../components/GuildIcon";
 
 const MyServers: FunctionComponent = () => {
   const router = useRouter();
@@ -29,7 +29,7 @@ const MyServers: FunctionComponent = () => {
   return (
     <>
       <Head>
-        <title>Your Servers</title>
+        <title>EventBot - My Servers</title>
       </Head>
       <section className="flex flex-col items-center gap-y-8 my-16">
         <h1 className="text-3xl font-bold">Select your server</h1>
@@ -40,19 +40,12 @@ const MyServers: FunctionComponent = () => {
               className="select-none flex gap-x-2 items-center justify-between"
             >
               <div className="flex items-center">
-                {guildItem.icon ? (
-                  <Image
-                    className="rounded-full"
-                    src={`https://cdn.discordapp.com/icons/${guildItem.id}/${guildItem?.icon}.png`}
-                    alt="guild icon"
-                    width={48}
-                    height={48}
-                  />
-                ) : (
-                  <span className="select-none w-[48px] h-[48px] flex items-center justify-center rounded-full border-2 border-gray-300 text-lg font-semibold">
-                    {guildItem.name.match(/\b(\w)/g)}
-                  </span>
-                )}
+                <GuildIcon
+                  guildId={guildItem.id}
+                  guildName={guildItem.name}
+                  guildIcon={guildItem.icon}
+                  size={48}
+                />
                 <h2 className="ml-4 text-lg font-medium">{guildItem.name}</h2>
               </div>
               <button

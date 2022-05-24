@@ -19,12 +19,9 @@ const MainNav = () => {
         <Link href="/">Event Bot</Link>
       </div>
       <div className="flex items-center gap-x-6">
-        <ul className="hidden md:flex">
+        <ul className="hidden md:flex gap-x-2 text-lg">
           {navItems.map((item) => (
-            <li
-              key={item}
-              className="mx-2 px-3 py-1.5 rounded text-lg hover:bg-gray-800 duration-200"
-            >
+            <li key={item} className="nav-item">
               <Link href={`/${item.toLowerCase()}`}>{item}</Link>
             </li>
           ))}
@@ -37,7 +34,7 @@ const MainNav = () => {
             </button>
           )}
           {session?.user && (
-            <Menu as="div" className="relative">
+            <Menu as="div" className="z-20 relative">
               <Menu.Button className="select-none cursor-pointer flex items-center duration-200 hover:bg-gray-800 px-2 py-1.5 rounded">
                 {session.user?.image && (
                   <Image
@@ -96,8 +93,8 @@ const MainNav = () => {
           )}
         </div>
         <Menu>
-          <Menu.Button>
-            <HiOutlineMenuAlt3 className="md:hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-200 text-2xl text-gray-400 cursor-pointer" />
+          <Menu.Button as="button" className="md:hidden">
+            <HiOutlineMenuAlt3 className="focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-200 text-2xl text-gray-400 cursor-pointer" />
           </Menu.Button>
           <Transition
             as={Fragment}
