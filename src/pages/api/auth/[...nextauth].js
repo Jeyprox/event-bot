@@ -54,9 +54,7 @@ export default NextAuth({
         };
       }
       //check if token is expired
-      if (Date.now() < token.accessTokenExpires) {
-        return token;
-      }
+      if (Date.now() < token.accessTokenExpires) return token;
       return refreshAccessToken(token);
     },
     session: ({ session, token }) => {

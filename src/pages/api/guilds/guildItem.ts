@@ -31,4 +31,5 @@ const guildHandler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   res.status(200).json({ guildInfo, guildSettings: dbRes });
 };
+
 export default guildHandler;

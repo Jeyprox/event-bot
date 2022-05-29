@@ -73,7 +73,8 @@ const ServerItem = () => {
                 >
                   <input
                     type="text"
-                    className=" bg-gray-800 px-4 py-2 text-gray-200 outline-none rounded"
+                    placeholder="search..."
+                    className=" bg-gray-800 px-4 py-2 text-gray-200 outline-none rounded placeholder:text-gray-300"
                   />
                 </motion.div>
               )}

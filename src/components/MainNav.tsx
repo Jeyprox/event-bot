@@ -27,8 +27,13 @@ const MainNav = () => {
           ))}
         </ul>
         <div>
-          {status === "loading" && <h1>Loading</h1>}
-          {!session && (
+          {status === "loading" && (
+            <div className="flex gap-x-2 animate-pulse h-8">
+              <div className="aspect-square bg-gray-700 rounded-full"></div>
+              <div className="w-24 rounded bg-gray-700"></div>
+            </div>
+          )}
+          {status === "unauthenticated" && (
             <button onClick={() => signIn("discord")} className="btn-primary">
               Login
             </button>
