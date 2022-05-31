@@ -44,7 +44,7 @@ const ServerItem = () => {
   return (
     <>
       <Head>
-        <title>EventBot - {guildItem?.guildInfo?.name || "GuildItem"}</title>
+        <title>EventBot - {guildItem?.guildInfo?.name}</title>
       </Head>
       <nav className="px-12 mt-4 mb-12 w-full flex justify-between items-center">
         <ul className="flex items-center gap-x-4 text-lg">
@@ -53,12 +53,12 @@ const ServerItem = () => {
             <span>Dashboard</span>
           </li>
           <li className="nav-item">
-            <HiCog />
-            <span>Settings</span>
-          </li>
-          <li className="nav-item">
             <HiCalendar />
             <span>Events</span>
+          </li>
+          <li className="nav-item">
+            <HiCog />
+            <span>Settings</span>
           </li>
         </ul>
         <div className="flex items-center gap-x-6">

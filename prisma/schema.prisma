@@ -10,7 +10,37 @@ generator client {
 }
 
 model Server {
-  id        String   @id @unique @db.VarChar(255)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String            @id @unique @db.VarChar(255)
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  events    EventsOnServers[]
+}
+
+model EventsOnServers {
+  event    Event   @relation(fields: [eventId], references: [id])
+  eventId  String
+  Server   Server? @relation(fields: [serverId], references: [id])
+  serverId String
+
+  @@id([eventId, serverId])
+}
+
+model Event {
+  id         String            @id @unique @default(cuid())
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+  createdBy  String            @db.VarChar(255)
+  name       String            @db.VarChar(255)
+  start      DateTime          @db.DateTime
+  duration   Int               @db.Int
+  details    String            @db.Text
+  servers    EventsOnServers[]
+  category   Category          @relation(fields: [categoryId], references: [id])
+  categoryId Int
+}
+
+model Category {
+  id     Int     @id @default(autoincrement())
+  name   String  @db.VarChar(255)
+  events Event[]
 }
