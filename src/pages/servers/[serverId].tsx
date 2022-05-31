@@ -12,12 +12,12 @@ import {
   HiSearch,
 } from "react-icons/hi";
 import useSWRImmutable from "swr/immutable";
-import { UserGuild } from "../../common/types";
 import { AnimatePresence, motion } from "framer-motion";
 
 import ErrorMessage from "../../components/ErrorMessage";
 import { GuildIcon } from "../../components/GuildIcon";
 import LoadingCircle from "../../components/LoadingCircle";
+import { UserGuild } from "../../interfaces";
 
 const ServerItem = () => {
   const router = useRouter();

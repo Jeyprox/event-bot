@@ -1,15 +1,14 @@
-import React, { FunctionComponent } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import useSWR from "swr";
 
 import { useSession } from "next-auth/react";
 
-import { EventItem } from "../../common/types";
 import LoadingCircle from "../../components/LoadingCircle";
 import ErrorMessage from "../../components/ErrorMessage";
+import { EventItem } from "../../interfaces";
 
-const MyEvents: FunctionComponent = () => {
+const MyEvents = () => {
   const { data: session } = useSession();
   const {
     data: eventList,

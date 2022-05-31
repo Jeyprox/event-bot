@@ -1,16 +1,15 @@
-import { FunctionComponent } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import useSWRImmutable from "swr/immutable";
 
-import { UserGuild } from "../../common/types";
 import { useSession } from "next-auth/react";
 
 import LoadingCircle from "../../components/LoadingCircle";
 import ErrorMessage from "../../components/ErrorMessage";
 import { GuildIcon } from "../../components/GuildIcon";
+import { UserGuild } from "../../interfaces";
 
-const MyServers: FunctionComponent = () => {
+const MyServers = () => {
   const router = useRouter();
   const { data: session } = useSession();
 
@@ -39,14 +38,14 @@ const MyServers: FunctionComponent = () => {
               key={guildItem.id}
               className="select-none flex gap-x-2 items-center justify-between"
             >
-              <div className="flex items-center">
+              <div className="flex gap-x-4 items-center">
                 <GuildIcon
                   guildId={guildItem.id}
                   guildName={guildItem.name}
                   guildIcon={guildItem.icon}
                   size={48}
                 />
-                <h2 className="ml-4 text-lg font-medium">{guildItem.name}</h2>
+                <h2 className="text-lg font-medium">{guildItem.name}</h2>
               </div>
               <button
                 className={`w-24 ${

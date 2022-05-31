@@ -1,7 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
-import { LandingGuild } from "../common/types";
 import { HiUserGroup } from "react-icons/hi";
 import { motion } from "framer-motion";
 import { landingAnimation } from "../common/animations";
@@ -9,23 +8,18 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetStaticProps } from "next";
 
-type FeatureProps = {
+export type FeatureProps = {
   title: string;
   desc: string;
   img?: string;
   rowMultiple?: boolean;
 };
 
-type SectionProps = {
+export type SectionProps = {
   title: string;
   subtitle: string;
   loadDelay: number;
   children: React.ReactNode;
-};
-
-type ServerProps = {
-  guild: LandingGuild;
-  itemIndex: number;
 };
 
 const MainSection = ({
@@ -91,55 +85,30 @@ const FeatureItem = ({ title, desc, img, rowMultiple }: FeatureProps) => {
   );
 };
 
-const ServerItem = ({ guild, itemIndex }: ServerProps) => {
-  return (
-    <div
-      className={`hidden ${
-        itemIndex < 4 ? "!flex" : ""
-      } md:flex bg-gray-800 rounded-md px-6 py-4 items-center`}
-    >
-      <div className="flex items-center justify-center">
-        <Image
-          src="/localeIcons/FlagDE.svg"
-          width={48}
-          height={48}
-          alt="GuildIcon"
-        />
-      </div>
-      <div className="ml-4">
-        <h1 className="text-lg font-semibold">{guild.name}</h1>
-        <h1 className="flex items-center text-md text-gray-300">
-          <HiUserGroup />
-          <p className="ml-1">{guild.memberCount}</p>
-        </h1>
-      </div>
-    </div>
-  );
-};
+const guildList = [
+  {
+    name: "Test Server",
+    icon: "guildIcon",
+    memberCount: 123412,
+  },
+  {
+    name: "Test Server",
+    icon: "guildIcon",
+    memberCount: 123412,
+  },
+  {
+    name: "Test Server",
+    icon: "guildIcon",
+    memberCount: 123412,
+  },
+  {
+    name: "Test Server",
+    icon: "guildIcon",
+    memberCount: 123412,
+  },
+];
 
-const Home = () => {
-  const guildList = [
-    {
-      name: "Test Server",
-      icon: "guildIcon",
-      memberCount: 123412,
-    },
-    {
-      name: "Test Server",
-      icon: "guildIcon",
-      memberCount: 123412,
-    },
-    {
-      name: "Test Server",
-      icon: "guildIcon",
-      memberCount: 123412,
-    },
-    {
-      name: "Test Server",
-      icon: "guildIcon",
-      memberCount: 123412,
-    },
-  ];
+const IndexPage = () => {
   const { t } = useTranslation("homepage");
   return (
     <>
@@ -207,12 +176,25 @@ const Home = () => {
         subtitle="Discover all the communities already using the bot to announce events"
       >
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8">
-          {guildList.map((guildItem, i) => (
-            <ServerItem
-              key={i.toString() + guildItem.name}
-              guild={guildItem}
-              itemIndex={i}
-            />
+          {guildList.map(({ name, icon, memberCount }, i) => (
+            <div
+              key={i.toString() + name}
+              className="flex gap-x-4 bg-gray-800 rounded px-6 py-4 items-center"
+            >
+              <Image
+                src="/localeIcons/FlagDE.svg"
+                width={48}
+                height={48}
+                alt="GuildIcon"
+              />
+              <div>
+                <h3 className="text-lg font-semibold">{name}</h3>
+                <p className="flex gap-x-1 items-center text-md text-gray-300">
+                  <HiUserGroup />
+                  <p>{memberCount}</p>
+                </p>
+              </div>
+            </div>
           ))}
         </div>
       </MainSection>
@@ -228,4 +210,4 @@ export const getStaticProps: GetStaticProps = async ({ locale = "en" }) => {
   };
 };
 
-export default Home;
+export default IndexPage;

@@ -5,6 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import { CookiesProvider } from "react-cookie";
 import { appWithTranslation } from "next-i18next";
 import { SWRConfig } from "swr";
+import Head from "next/head";
 
 const fetcher = async (url: string) => {
   const res = await fetch(url);
@@ -20,19 +21,24 @@ const fetcher = async (url: string) => {
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <SWRConfig
-      value={{
-        fetcher,
-      }}
-    >
-      <SessionProvider session={pageProps.session}>
-        <CookiesProvider>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </CookiesProvider>
-      </SessionProvider>
-    </SWRConfig>
+    <>
+      <Head>
+        <title>EventBot</title>
+      </Head>
+      <SWRConfig
+        value={{
+          fetcher,
+        }}
+      >
+        <SessionProvider session={pageProps.session}>
+          <CookiesProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </CookiesProvider>
+        </SessionProvider>
+      </SWRConfig>
+    </>
   );
 }
 
