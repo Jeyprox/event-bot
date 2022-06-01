@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 
 import LoadingCircle from "../../components/LoadingCircle";
 import ErrorMessage from "../../components/ErrorMessage";
-import { EventItem } from "../../interfaces";
+import { EventPreview } from "../../interfaces";
 
 const MyEvents = () => {
   const { data: session } = useSession();
@@ -14,12 +14,7 @@ const MyEvents = () => {
     session ? "/api/events/userEventList?userId=" + session?.id : null
   );
 
-  if (eventError)
-    return (
-      <ErrorMessage
-        errorMessage={eventError.message || "Error loading guilds"}
-      />
-    );
+  if (eventError) return <ErrorMessage errorMessage={eventError.message} />;
   if (!eventList) return <LoadingCircle />;
 
   return (
@@ -38,15 +33,12 @@ const MyEvents = () => {
               </p>
             </div>
           )}
-          {eventList?.map((event: EventItem) => (
-            <Link key={event.event_id} href={`/events/${event.event_id}`}>
+          {eventList?.map((event: EventPreview) => (
+            <Link key={event.id} href={`/events/${event.id}`}>
               <a>
-                <div
-                  className="flex items-center justify-between duration-200 px-5 py-4 my-1 rounded-md hover:bg-gray-800"
-                  key={event.event_id}
-                >
+                <div className="flex items-center justify-between duration-200 px-5 py-4 my-1 rounded-md hover:bg-gray-800">
                   <div className="select-none">
-                    <h2 className="text-xl font-medium">{event.event_name}</h2>
+                    <h2 className="text-xl font-medium">{event.name}</h2>
                   </div>
                   <button className="btn-primary w-32">Manage</button>
                 </div>

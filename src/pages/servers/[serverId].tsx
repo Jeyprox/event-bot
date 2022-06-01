@@ -46,7 +46,7 @@ const ServerItem = () => {
       <Head>
         <title>EventBot - {guildItem?.guildInfo?.name}</title>
       </Head>
-      <nav className="px-12 mt-4 mb-12 w-full flex justify-between items-center">
+      <nav className="px-12 -mt-8 mb-12 w-full flex justify-between items-center">
         <ul className="flex items-center gap-x-4 text-lg">
           <li className="nav-item">
             <HiClipboardList />

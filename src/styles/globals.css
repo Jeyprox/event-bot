@@ -21,8 +21,10 @@
   .dropdown {
     @apply absolute mt-2 right-0 origin-top divide-y divide-gray-700 bg-gray-800 rounded-md shadow;
   }
-
   .dropdown-item {
     @apply p-2 text-right text-base rounded-md hover:bg-gray-700 duration-200;
+  }
+  .input {
+    @apply px-4 py-2 rounded border border-gray-700 bg-gray-900 hover:bg-gray-800 focus:bg-gray-800 focus:outline-0 duration-200;
   }
 }

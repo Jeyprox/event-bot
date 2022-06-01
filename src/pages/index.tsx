@@ -191,7 +191,7 @@ const IndexPage = () => {
                 <h3 className="text-lg font-semibold">{name}</h3>
                 <p className="flex gap-x-1 items-center text-md text-gray-300">
                   <HiUserGroup />
-                  <p>{memberCount}</p>
+                  <span>{memberCount}</span>
                 </p>
               </div>
             </div>

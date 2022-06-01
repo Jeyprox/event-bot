@@ -30,7 +30,7 @@ const MyServers = () => {
       <Head>
         <title>EventBot - My Servers</title>
       </Head>
-      <section className="flex flex-col items-center gap-y-8 my-16">
+      <section className="flex flex-col items-center gap-y-8">
         <h1 className="text-3xl font-bold">Select your server</h1>
         <div className="w-4/5 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
           {guildList?.map((guildItem: UserGuild) => (

@@ -42,5 +42,6 @@ model Event {
 model Category {
   id     Int     @id @default(autoincrement())
   name   String  @db.VarChar(255)
+  colour String  @db.VarChar(255)
   events Event[]
 }

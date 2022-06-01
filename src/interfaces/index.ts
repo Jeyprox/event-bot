@@ -15,8 +15,17 @@ export interface UserGuild {
   hasBot: boolean;
 }
 
-export interface EventItem {
-  event_id: string;
-  event_name: string;
-  creator: number;
+export interface Category {
+  name: string;
+  colour: string;
+}
+
+export interface EventPreview {
+  id: string;
+  name: string;
+  user: string;
+  start: Date;
+  duration: number;
+  details: string;
+  category: Category;
 }
