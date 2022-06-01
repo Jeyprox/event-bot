@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Guild, UserGuild } from "../../../common/types";
 
 import { getToken } from "next-auth/jwt";
+import { Guild, UserGuild } from "../../../interfaces";
 
 const guildHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const token = await getToken({
