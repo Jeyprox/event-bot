@@ -1,11 +1,12 @@
-import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
+import { Guild } from "../../../interfaces";
 
 const guildHandler = async (_: NextApiRequest, res: NextApiResponse) => {
-  const guildRes = await axios.get("https://discord.com/api/users/@me/guilds", {
+  const guildRes = await fetch("https://discord.com/api/users/@me/guilds", {
     headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` },
   });
-  res.status(200).json(guildRes.data);
+  const guildList: Guild[] = await guildRes.json();
+  res.status(200).json(guildList);
 };
 
 export default guildHandler;
