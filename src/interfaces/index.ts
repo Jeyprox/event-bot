@@ -25,7 +25,6 @@ export interface EventPreview {
   name: string;
   user: string;
   start: Date;
-  duration: number;
   details: string;
   category: Category;
 }

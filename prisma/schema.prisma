@@ -31,8 +31,7 @@ model Event {
   updatedAt  DateTime          @updatedAt
   createdBy  String            @db.VarChar(255)
   name       String            @db.VarChar(255)
-  start      DateTime          @db.DateTime
-  duration   Int               @db.Int
+  date       DateTime          @db.DateTime
   details    String            @db.Text
   servers    EventsOnServers[]
   category   Category          @relation(fields: [categoryId], references: [id])

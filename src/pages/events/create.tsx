@@ -1,10 +1,14 @@
-import { Menu, Transition } from "@headlessui/react";
+import { Listbox, Menu, Transition } from "@headlessui/react";
 import {
   add,
   eachDayOfInterval,
+  eachHourOfInterval,
+  eachMinuteOfInterval,
   endOfISOWeek,
   endOfMonth,
+  endOfToday,
   format,
+  getHours,
   getISODay,
   isEqual,
   isSameMonth,
@@ -31,7 +35,7 @@ import {
 import { Category } from "../../interfaces";
 
 type FormData = {
-  name: string;
+  event_name: string;
   details: string;
   start: Date;
   duration: number;
@@ -120,7 +124,9 @@ const Calendar = (props: UseControllerProps<FormData>) => {
                   isEqual(day, seletedDay) &&
                     !isToday(day) &&
                     "bg-gray-200 text-gray-800 font-bold",
-                  isToday(day) && "text-indigo-400 font-bold",
+                  !isEqual(day, seletedDay) &&
+                    isToday(day) &&
+                    "text-indigo-400 font-bold",
                   !isSameMonth(day, firstDayCurrentMonth) && "text-gray-400",
                   !isEqual(day, seletedDay) && "hover:bg-gray-700",
                   "mx-auto grid place-content-center rounded w-10 aspect-square duration-200"
@@ -148,6 +154,10 @@ const CreateEvent = () => {
   });
 
   register("start", { required: true });
+
+  let [selectedTime, setSelectedTime] = useState(
+    format(add(startOfToday(), { hours: 12 }), "HH:mm")
+  );
 
   const eventDay = useWatch({
     control,
@@ -187,9 +197,9 @@ const CreateEvent = () => {
       >
         <input
           type="text"
-          className="input"
+          className="form-input input text-lg"
           placeholder="Event Name"
-          {...register("name", { required: true, maxLength: 32 })}
+          {...register("event_name", { required: true, maxLength: 32 })}
         />
         <div className="flex justify-between items-center bg-gray-800 border border-gray-700 px-4 py-2 rounded">
           {sessionStatus === "loading" && (
@@ -212,7 +222,7 @@ const CreateEvent = () => {
         </div>
         <div className="relative col-span-2">
           <textarea
-            className="w-full input text-base h-24 max-h-64"
+            className="form-input text-base w-full input h-24 max-h-64"
             {...register("details", { required: true })}
           />
           <span className="pointer-events-none absolute bottom-3 right-3 text-base text-gray-300">
@@ -224,8 +234,8 @@ const CreateEvent = () => {
             <>
               <Menu.Button
                 className={classNames(
-                  "z-10 w-full flex justify-between border border-gray-700 items-center hover:bg-gray-800 py-2 px-4 rounded duration-200",
-                  open && "bg-gray-800"
+                  "z-10 w-full flex justify-between border border-gray-700 items-center hover:bg-gray-800 py-2 px-4 rounded duration-200 focus:ring-2 ring-indigo-600",
+                  open && "bg-gray-800 ring-2"
                 )}
               >
                 <span>{format(eventDay, "dd/MM/yyyy")}</span>
@@ -253,11 +263,47 @@ const CreateEvent = () => {
             </>
           )}
         </Menu>
-        <input
-          className="input"
-          type="range"
-          {...register("duration", { required: true })}
-        />
+        <Listbox
+          as="div"
+          className="relative"
+          value={selectedTime}
+          onChange={setSelectedTime}
+        >
+          {({ open }) => (
+            <>
+              <Listbox.Button
+                className={classNames(
+                  "w-full flex justify-between border border-gray-700 items-center hover:bg-gray-800 py-2 px-4 rounded duration-200 focus:ring-2 ring-indigo-600",
+                  open && "bg-gray-800 ring-2"
+                )}
+              >
+                <span>{selectedTime}</span>
+                <HiChevronDown className="text-xl" />
+              </Listbox.Button>
+              <Listbox.Options className="scrollbar absolute mt-2 w-full text-center max-h-64 overflow-x-hidden overflow-y-scroll bg-gray-800 rounded p-2 grid gap-y-1">
+                {eachHourOfInterval({
+                  start: startOfToday(),
+                  end: endOfToday(),
+                }).map((time) => {
+                  return (
+                    <Listbox.Option
+                      className={classNames(
+                        "cursor-pointer rounded py-1.5  duration-200",
+                        selectedTime === format(time, "HH:mm")
+                          ? "bg-indigo-400 hover:bg-indigo-500"
+                          : "hover:bg-gray-700"
+                      )}
+                      key={format(time, "HH:mm")}
+                      value={format(time, "HH:mm")}
+                    >
+                      {format(time, "HH:mm")}
+                    </Listbox.Option>
+                  );
+                })}
+              </Listbox.Options>
+            </>
+          )}
+        </Listbox>
         <select
           className="input col-span-2"
           {...register("category", { required: true })}
