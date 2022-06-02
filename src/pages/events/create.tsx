@@ -1,15 +1,14 @@
-import { Listbox, Menu, Transition } from "@headlessui/react";
+import { Disclosure, Listbox, Menu, Transition } from "@headlessui/react";
 import {
   add,
   eachDayOfInterval,
   eachHourOfInterval,
-  eachMinuteOfInterval,
   endOfISOWeek,
   endOfMonth,
   endOfToday,
   format,
-  getHours,
   getISODay,
+  getTime,
   isEqual,
   isSameMonth,
   isToday,
@@ -33,6 +32,8 @@ import {
   HiChevronRight,
 } from "react-icons/hi";
 import { Category } from "../../interfaces";
+import useSWRImmutable from "swr/immutable";
+import ErrorMessage from "../../components/ErrorMessage";
 
 type FormData = {
   event_name: string;
@@ -146,18 +147,27 @@ const Calendar = (props: UseControllerProps<FormData>) => {
 
 const CreateEvent = () => {
   const { data: session, status: sessionStatus } = useSession();
-  const { register, handleSubmit, control } = useForm<FormData>({
-    defaultValues: {
-      start: startOfToday(),
-    },
-    mode: "onChange",
-  });
+  const { data: categoryList, error: categoryError } = useSWRImmutable(
+    () => "/api/events/categoryList"
+  );
+
+  const { register, handleSubmit, control, setValue, watch } =
+    useForm<FormData>({
+      defaultValues: {
+        start: startOfToday(),
+        category: {},
+      },
+      mode: "onChange",
+    });
 
   register("start", { required: true });
+  register("category", { required: true });
 
   let [selectedTime, setSelectedTime] = useState(
     format(add(startOfToday(), { hours: 12 }), "HH:mm")
   );
+
+  const liveFields = watch();
 
   const eventDay = useWatch({
     control,
@@ -170,9 +180,25 @@ const CreateEvent = () => {
     defaultValue: "",
   });
 
+  const selectedCategory = useWatch({
+    control,
+    name: "category",
+  });
+
+  const getFinalStartTime = () => {
+    let startTime = parse(selectedTime, "HH:mm", new Date());
+    return add(eventDay, {
+      hours: startTime.getHours(),
+      minutes: startTime.getMinutes(),
+    });
+  };
+
   const onSubmit = (data: FormData) => {
     console.log(data);
   };
+
+  if (categoryError) return <ErrorMessage errorMessage={categoryError} />;
+
   return (
     <div className="mx-auto max-w-4xl grid gap-y-8">
       <div className="grid gap-y-2">
@@ -191,6 +217,91 @@ const CreateEvent = () => {
           your category
         </p>
       </div>
+      <Disclosure as="div" className="relative">
+        <Disclosure.Button className="w-full text-lg border border-gray-700 font-semibold text-gray-300 bg-gray-800 px-4 py-2 rounded flex justify-between items-center">
+          <span>Show Preview</span>
+          <HiChevronDown className="text-xl" />
+        </Disclosure.Button>
+        <Transition
+          as={Fragment}
+          enter="duration-300"
+          enterFrom="-translate-y-2 opacity-0"
+          enterTo="translate-y-0 opacity-100"
+          leave="duration-300"
+          leaveFrom="translate-y-0 opacity-100"
+          leaveTo="-translate-y-2 opacity-0"
+        >
+          <Disclosure.Panel className="absolute mt-2 z-10 w-full shadow">
+            <div className="bg-gray-800 flex items-start gap-x-4 p-4 rounded">
+              <div className="grid place-content-center h-12 w-12 bg-gray-700 rounded-full">
+                <Image
+                  src="/img/icons/calendar.svg"
+                  alt="bot-image"
+                  width={30}
+                  height={30}
+                  layout="fixed"
+                />
+              </div>
+              <div className="grid gap-y-1">
+                <div className="flex items-center gap-x-1.5">
+                  <h2 className="font-semibold">EventBot</h2>
+                  <span className="bg-blue-500 text-xs px-1 rounded font-semibold">
+                    BOT
+                  </span>
+                  <p className="text-sm text-gray-400">
+                    Today at {format(new Date(), "HH:mm")}
+                  </p>
+                </div>
+                <div className="w-[24rem] relative grid gap-y-2 bg-gray-900 pl-5 px-4 py-2 rounded">
+                  <span className="absolute w-1 h-full bg-indigo-500 rounded-l"></span>
+                  <div className="flex items-center gap-x-2">
+                    <Image
+                      src={String(session?.user?.image)}
+                      alt="user-icon"
+                      width={24}
+                      height={24}
+                      layout="fixed"
+                      className="rounded-full"
+                    />
+                    <p className="text-sm font-semibold">
+                      {session?.user?.name}
+                    </p>
+                  </div>
+                  <div className="grid gap-y-2">
+                    <div>
+                      <h2 className="font-semibold">{liveFields.event_name}</h2>
+                      <p className="text-sm w-full break-all text-gray-300">
+                        {liveFields.details}
+                      </p>
+                    </div>
+                    <div>
+                      <h2 className="text-sm font-semibold">Start Date</h2>
+                      <p className="text-sm text-gray-300">
+                        {format(getFinalStartTime(), "HH:mm - dd/MM/yyyy")}
+                      </p>
+                    </div>
+                    <div>
+                      <h2 className="text-sm font-semibold">Event Link</h2>
+                      <a
+                        href={`https://event-bot.vercel.app/events/${encodeURI(
+                          liveFields.event_name
+                        )}`}
+                        className="text-sm text-gray-300"
+                      >
+                        https://event-bot.vercel.app/events/
+                        {encodeURI(liveFields.event_name)}
+                      </a>
+                    </div>
+                    <p className="text-xs text-gray-300 font-semibold">
+                      {liveFields.category?.name}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Disclosure.Panel>
+        </Transition>
+      </Disclosure>
       <form
         className="grid grid-cols-2 gap-8 text-lg"
         onSubmit={handleSubmit(onSubmit)}
@@ -222,11 +333,12 @@ const CreateEvent = () => {
         </div>
         <div className="relative col-span-2">
           <textarea
-            className="form-input text-base w-full input h-24 max-h-64"
+            maxLength={512}
+            className="form-input resize-none text-base max-w-full break-words w-full input h-64"
             {...register("details", { required: true })}
           />
           <span className="pointer-events-none absolute bottom-3 right-3 text-base text-gray-300">
-            {detailText.length}/256
+            {detailText.length}/512
           </span>
         </div>
         <Menu as="div" className="relative">
@@ -250,7 +362,7 @@ const CreateEvent = () => {
                 leaveFrom="translate-y-0 opacity-100"
                 leaveTo="-translate-y-2 opacity-0"
               >
-                <Menu.Items className="w-full mt-2 absolute bg-gray-800 rounded">
+                <Menu.Items className="z-10 w-full mt-2 absolute bg-gray-800 rounded">
                   <Menu.Item>
                     <Calendar
                       control={control}
@@ -264,6 +376,7 @@ const CreateEvent = () => {
           )}
         </Menu>
         <Listbox
+          name="category"
           as="div"
           className="relative"
           value={selectedTime}
@@ -280,12 +393,20 @@ const CreateEvent = () => {
                 <span>{selectedTime}</span>
                 <HiChevronDown className="text-xl" />
               </Listbox.Button>
-              <Listbox.Options className="scrollbar absolute mt-2 w-full text-center max-h-64 overflow-x-hidden overflow-y-scroll bg-gray-800 rounded p-2 grid gap-y-1">
-                {eachHourOfInterval({
-                  start: startOfToday(),
-                  end: endOfToday(),
-                }).map((time) => {
-                  return (
+              <Transition
+                as={Fragment}
+                enter="duration-300"
+                enterFrom="-translate-y-2 opacity-0"
+                enterTo="translate-y-0 opacity-100"
+                leave="duration-300"
+                leaveFrom="translate-y-0 opacity-100"
+                leaveTo="-translate-y-2 opacity-0"
+              >
+                <Listbox.Options className="scrollbar absolute mt-2 w-full text-center max-h-64 overflow-x-hidden overflow-y-scroll bg-gray-800 rounded p-2 grid gap-y-1">
+                  {eachHourOfInterval({
+                    start: startOfToday(),
+                    end: endOfToday(),
+                  }).map((time) => (
                     <Listbox.Option
                       className={classNames(
                         "cursor-pointer rounded py-1.5  duration-200",
@@ -298,21 +419,51 @@ const CreateEvent = () => {
                     >
                       {format(time, "HH:mm")}
                     </Listbox.Option>
-                  );
-                })}
-              </Listbox.Options>
+                  ))}
+                </Listbox.Options>
+              </Transition>
             </>
           )}
         </Listbox>
-        <select
-          className="input col-span-2"
-          {...register("category", { required: true })}
-        >
-          <option value="">Select a category</option>
-          <option value="1">Category 1</option>
-          <option value="2">Category 2</option>
-          <option value="3">Category 3</option>
-        </select>
+        {!categoryList ? (
+          <div className="w-full h-12 bg-gray-700 rounded animate-pulse"></div>
+        ) : (
+          <Listbox
+            as="div"
+            className="relative"
+            value={selectedCategory}
+            onChange={(value) => setValue("category", value)}
+          >
+            {({ open }) => (
+              <>
+                <Listbox.Button
+                  className={classNames(
+                    "w-full flex justify-between border border-gray-700 items-center hover:bg-gray-800 py-2 px-4 rounded duration-200 focus:ring-2 ring-indigo-600",
+                    open && "bg-gray-800 ring-2"
+                  )}
+                >
+                  <span>{selectedCategory.name || "Select a category"}</span>
+                  <HiChevronDown className="text-xl" />
+                </Listbox.Button>
+                <Listbox.Options className="scrollbar absolute mt-2 w-full text-center max-h-64 overflow-x-hidden overflow-y-auto bg-gray-800 rounded p-2 grid gap-y-1">
+                  {categoryList.map((category: Category) => (
+                    <Listbox.Option
+                      className={classNames(
+                        "cursor-pointer rounded py-1.5 duration-200 hover:bg-gray-700",
+                        selectedCategory.id === category.id &&
+                          "bg-indigo-400 hover:bg-indigo-500"
+                      )}
+                      key={category.id}
+                      value={category}
+                    >
+                      {category.name}
+                    </Listbox.Option>
+                  ))}
+                </Listbox.Options>
+              </>
+            )}
+          </Listbox>
+        )}
         <button
           type="submit"
           name="Create Event"

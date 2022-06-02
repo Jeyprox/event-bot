@@ -17,12 +17,7 @@ const MyServers = () => {
     session ? "/api/guilds/guildList?userId=" + session?.userId : null
   );
 
-  if (guildError)
-    return (
-      <ErrorMessage
-        errorMessage={guildError.message || "Error loading guilds"}
-      />
-    );
+  if (guildError) return <ErrorMessage errorMessage={guildError.message} />;
   if (!guildList) return <LoadingCircle />;
 
   return (
