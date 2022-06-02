@@ -8,23 +8,18 @@ import {
   endOfToday,
   format,
   getISODay,
-  getTime,
   isEqual,
   isSameMonth,
   isToday,
   parse,
+  set,
   startOfISOWeek,
   startOfToday,
 } from "date-fns";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { Fragment, useState } from "react";
-import {
-  useController,
-  UseControllerProps,
-  useForm,
-  useWatch,
-} from "react-hook-form";
+import { useController, UseControllerProps, useForm } from "react-hook-form";
 import {
   HiCheck,
   HiChevronDown,
@@ -154,7 +149,8 @@ const CreateEvent = () => {
   const { register, handleSubmit, control, setValue, watch } =
     useForm<FormData>({
       defaultValues: {
-        start: startOfToday(),
+        details: "",
+        start: add(startOfToday(), { hours: new Date().getHours() }),
         category: {},
       },
       mode: "onChange",
@@ -163,31 +159,11 @@ const CreateEvent = () => {
   register("start", { required: true });
   register("category", { required: true });
 
-  let [selectedTime, setSelectedTime] = useState(
-    format(add(startOfToday(), { hours: 12 }), "HH:mm")
-  );
-
   const liveFields = watch();
 
-  const eventDay = useWatch({
-    control,
-    name: "start",
-  });
-
-  const detailText = useWatch({
-    control,
-    name: "details",
-    defaultValue: "",
-  });
-
-  const selectedCategory = useWatch({
-    control,
-    name: "category",
-  });
-
-  const getFinalStartTime = () => {
-    let startTime = parse(selectedTime, "HH:mm", new Date());
-    return add(eventDay, {
+  const getStartDate = (value: string) => {
+    let startTime = parse(value, "HH:mm", new Date());
+    return set(liveFields.start, {
       hours: startTime.getHours(),
       minutes: startTime.getMinutes(),
     });
@@ -277,7 +253,7 @@ const CreateEvent = () => {
                     <div>
                       <h2 className="text-sm font-semibold">Start Date</h2>
                       <p className="text-sm text-gray-300">
-                        {format(getFinalStartTime(), "HH:mm - dd/MM/yyyy")}
+                        {format(liveFields.start, "HH:mm - dd/MM/yyyy")}
                       </p>
                     </div>
                     <div>
@@ -338,7 +314,7 @@ const CreateEvent = () => {
             {...register("details", { required: true })}
           />
           <span className="pointer-events-none absolute bottom-3 right-3 text-base text-gray-300">
-            {detailText.length}/512
+            {liveFields.details?.length}/512
           </span>
         </div>
         <Menu as="div" className="relative">
@@ -346,11 +322,11 @@ const CreateEvent = () => {
             <>
               <Menu.Button
                 className={classNames(
-                  "z-10 w-full flex justify-between border border-gray-700 items-center hover:bg-gray-800 py-2 px-4 rounded duration-200 focus:ring-2 ring-indigo-600",
+                  "input-dropdown",
                   open && "bg-gray-800 ring-2"
                 )}
               >
-                <span>{format(eventDay, "dd/MM/yyyy")}</span>
+                <span>{format(liveFields.start, "dd/MM/yyyy")}</span>
                 <HiChevronDown className="text-xl" />
               </Menu.Button>
               <Transition
@@ -379,18 +355,18 @@ const CreateEvent = () => {
           name="category"
           as="div"
           className="relative"
-          value={selectedTime}
-          onChange={setSelectedTime}
+          value={format(liveFields.start, "HH:mm")}
+          onChange={(value) => setValue("start", getStartDate(value))}
         >
           {({ open }) => (
             <>
               <Listbox.Button
                 className={classNames(
-                  "w-full flex justify-between border border-gray-700 items-center hover:bg-gray-800 py-2 px-4 rounded duration-200 focus:ring-2 ring-indigo-600",
+                  "input-dropdown",
                   open && "bg-gray-800 ring-2"
                 )}
               >
-                <span>{selectedTime}</span>
+                <span>{format(liveFields.start, "HH:mm")}</span>
                 <HiChevronDown className="text-xl" />
               </Listbox.Button>
               <Transition
@@ -410,7 +386,8 @@ const CreateEvent = () => {
                     <Listbox.Option
                       className={classNames(
                         "cursor-pointer rounded py-1.5  duration-200",
-                        selectedTime === format(time, "HH:mm")
+                        format(liveFields.start, "HH:mm") ===
+                          format(time, "HH:mm")
                           ? "bg-indigo-400 hover:bg-indigo-500"
                           : "hover:bg-gray-700"
                       )}
@@ -431,18 +408,18 @@ const CreateEvent = () => {
           <Listbox
             as="div"
             className="relative"
-            value={selectedCategory}
+            value={liveFields.category}
             onChange={(value) => setValue("category", value)}
           >
             {({ open }) => (
               <>
                 <Listbox.Button
                   className={classNames(
-                    "w-full flex justify-between border border-gray-700 items-center hover:bg-gray-800 py-2 px-4 rounded duration-200 focus:ring-2 ring-indigo-600",
+                    "input-dropdown",
                     open && "bg-gray-800 ring-2"
                   )}
                 >
-                  <span>{selectedCategory.name || "Select a category"}</span>
+                  <span>{liveFields.category.name || "Select a category"}</span>
                   <HiChevronDown className="text-xl" />
                 </Listbox.Button>
                 <Listbox.Options className="scrollbar absolute mt-2 w-full text-center max-h-64 overflow-x-hidden overflow-y-auto bg-gray-800 rounded p-2 grid gap-y-1">
@@ -450,7 +427,7 @@ const CreateEvent = () => {
                     <Listbox.Option
                       className={classNames(
                         "cursor-pointer rounded py-1.5 duration-200 hover:bg-gray-700",
-                        selectedCategory.id === category.id &&
+                        liveFields.category.id === category.id &&
                           "bg-indigo-400 hover:bg-indigo-500"
                       )}
                       key={category.id}
@@ -467,7 +444,7 @@ const CreateEvent = () => {
         <button
           type="submit"
           name="Create Event"
-          className="col-span-2 mx-auto btn-primary w-48"
+          className="col-span-2 mx-auto btn-primary w-64"
         >
           Create Event
         </button>
