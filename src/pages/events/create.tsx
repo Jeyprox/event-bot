@@ -1,6 +1,7 @@
 import { Disclosure, Listbox, Menu, Transition } from "@headlessui/react";
 import {
   add,
+  addDays,
   eachDayOfInterval,
   eachHourOfInterval,
   endOfISOWeek,
@@ -34,7 +35,6 @@ type FormData = {
   event_name: string;
   details: string;
   start: Date;
-  duration: number;
   category: Category;
 };
 
@@ -90,13 +90,11 @@ const Calendar = (props: UseControllerProps<FormData>) => {
       <div className="grid gap-y-4 text-sm">
         {/* day labels */}
         <div className="grid grid-cols-7 text-gray-300">
-          <h3>M</h3>
-          <h3>T</h3>
-          <h3>W</h3>
-          <h3>T</h3>
-          <h3>F</h3>
-          <h3>S</h3>
-          <h3>S</h3>
+          {Array.from(Array(7)).map((e, i) => (
+            <h3 key={i}>
+              {format(addDays(startOfISOWeek(today), i), "EEEEE")}
+            </h3>
+          ))}
         </div>
         {/* list of days */}
         <div className="grid grid-cols-7 gap-y-2 text-gray-100">
@@ -110,6 +108,7 @@ const Calendar = (props: UseControllerProps<FormData>) => {
             >
               <button
                 type="button"
+                value={day.toISOString()}
                 onClick={() => {
                   setSelectedDay(day), field.onChange(day);
                 }}
