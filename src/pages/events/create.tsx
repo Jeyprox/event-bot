@@ -230,14 +230,18 @@ const CreateEvent = () => {
                 <div className="w-[24rem] relative grid gap-y-2 bg-gray-900 pl-5 px-4 py-2 rounded">
                   <span className="absolute w-1 h-full bg-indigo-500 rounded-l"></span>
                   <div className="flex items-center gap-x-2">
-                    <Image
-                      src={String(session?.user?.image)}
-                      alt="user-icon"
-                      width={24}
-                      height={24}
-                      layout="fixed"
-                      className="rounded-full"
-                    />
+                    {session?.user ? (
+                      <Image
+                        src={String(session?.user?.image)}
+                        alt="user-icon"
+                        width={24}
+                        height={24}
+                        layout="fixed"
+                        className="rounded-full"
+                      />
+                    ) : (
+                      <div className="w-6 aspect-square rounded-full bg-gray-700 animate-pulse"></div>
+                    )}
                     <p className="text-sm font-semibold">
                       {session?.user?.name}
                     </p>
