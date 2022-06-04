@@ -1,18 +1,27 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { Category } from "../../../interfaces";
 import prisma from "../../../lib/prisma";
 
 const eventHandler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { eventName, eventDate, details, category, userId } = req.body;
+  const {
+    eventName,
+    eventDate,
+    details,
+    category,
+    userId,
+  }: {
+    eventName: string;
+    eventDate: Date;
+    details: string;
+    category: Category;
+    userId: string;
+  } = req.body;
   const newEvent = await prisma.event.create({
     data: {
       name: eventName,
       date: eventDate,
       details: details,
-      category: {
-        connect: {
-          id: category,
-        },
-      },
+      categoryId: category.id,
       createdBy: userId,
     },
   });
