@@ -17,7 +17,7 @@ import {
   startOfISOWeek,
   startOfToday,
 } from "date-fns";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import { Fragment, useState } from "react";
 import { useController, UseControllerProps, useForm } from "react-hook-form";
@@ -146,6 +146,11 @@ const Calendar = (props: UseControllerProps<FormData>) => {
 const CreateEvent = () => {
   const router = useRouter();
   const { data: session, status: sessionStatus } = useSession();
+
+  if (sessionStatus === "unauthenticated") {
+    signIn("discord");
+  }
+
   const { data: categoryList, error: categoryError } = useSWRImmutable(
     () => "/api/events/categoryList"
   );

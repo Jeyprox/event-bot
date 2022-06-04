@@ -1,7 +1,8 @@
 import useSWRImmutable from "swr/immutable";
 import ErrorMessage from "../components/ErrorMessage";
+import EventPreview from "../components/EventPreview";
 import LoadingCircle from "../components/LoadingCircle";
-import { EventPreview } from "../interfaces";
+import { EventPreview as EventType } from "../interfaces";
 
 const Events = () => {
   const { data: eventList, error: eventError } = useSWRImmutable(
@@ -22,11 +23,8 @@ const Events = () => {
             </p>
           </div>
         )}
-        {eventList?.map((event: EventPreview) => (
-          <div key={event.id}>
-            <h2>{event.name}</h2>
-            <p>{event.details}</p>
-          </div>
+        {eventList?.map((event: EventType) => (
+          <EventPreview key={event.id} />
         ))}
       </div>
     </div>
