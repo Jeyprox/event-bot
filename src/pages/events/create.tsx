@@ -34,6 +34,7 @@ import useSWRImmutable from "swr/immutable";
 import ErrorMessage from "../../components/ErrorMessage";
 import { useRouter } from "next/router";
 import { AnimatePresence, motion } from "framer-motion";
+import PageTitle from "../../components/PageTitle";
 
 type FormData = {
   event_name: string;
@@ -233,22 +234,12 @@ const CreateEvent = () => {
           </motion.div>
         )}
       </AnimatePresence>
-      <div className="grid gap-y-2">
-        <div className="flex items-center gap-x-4">
-          <Image
-            src="/img/icons/add.svg"
-            alt="add-icon"
-            width={32}
-            height={32}
-            layout="fixed"
-          />
-          <h1 className="text-2xl font-semibold">Create Event</h1>
-        </div>
-        <p className="text-gray-300">
-          Bring your events to life by announcing them to all the servers in
-          your category
-        </p>
-      </div>
+      <PageTitle
+        title="Create Event"
+        subtitle="Bring your events to life by announcing them to all the servers in
+          your category"
+        iconName="add"
+      />
       <Disclosure as="div" className="relative">
         <Disclosure.Button className="w-full text-lg border border-gray-700 font-semibold text-gray-300 bg-gray-800 px-4 py-2 rounded flex justify-between items-center">
           <span>Show Preview</span>

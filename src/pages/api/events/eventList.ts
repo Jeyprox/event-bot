@@ -12,6 +12,9 @@ const eventHandler = async (_: NextApiRequest, res: NextApiResponse) => {
     orderBy: {
       date: "asc",
     },
+    include: {
+      category: true,
+    },
   });
 
   if (!eventList)
