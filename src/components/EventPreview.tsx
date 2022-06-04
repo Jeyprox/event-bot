@@ -15,7 +15,7 @@ const EventPreview = ({ event }: { event: Event & { category: Category } }) => {
           <div>
             <span
               style={{ backgroundColor: event.category.colour }}
-              className="uppercase px-1 py-0.5 rounded"
+              className="uppercase px-1.5 py-1 text-sm rounded"
             >
               {event.category.name}
             </span>
@@ -28,7 +28,7 @@ const EventPreview = ({ event }: { event: Event & { category: Category } }) => {
         )}
         <button
           type="button"
-          className="flex items-center justify-center gap-x-2 justify-self-end btn-primary w-40"
+          className="flex items-center justify-center gap-x-2 btn-primary"
         >
           <span className="font-semibold">More Info</span>
           <HiArrowRight />
