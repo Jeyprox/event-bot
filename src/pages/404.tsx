@@ -15,6 +15,7 @@ const Custom404 = () => {
             alt="NotFound"
             layout="fill"
             className="object-contain"
+            priority
           ></Image>
         </div>
         <h1 className="mb-4 text-md md:text-xl">

@@ -1,15 +1,16 @@
+import { add } from "date-fns";
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
 
-const eventHandler = async (req: NextApiRequest, res: NextApiResponse) => {
+const eventHandler = async (_: NextApiRequest, res: NextApiResponse) => {
   const eventList = await prisma.event.findMany({
     where: {
-      start: {
-        gt: new Date(),
+      date: {
+        gt: add(new Date(), { hours: -4 }),
       },
     },
     orderBy: {
-      start: "asc",
+      date: "asc",
     },
   });
 

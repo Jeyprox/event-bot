@@ -26,15 +26,19 @@ import {
   HiChevronDown,
   HiChevronLeft,
   HiChevronRight,
+  HiExclamationCircle,
+  HiX,
 } from "react-icons/hi";
-import { Category } from "../../interfaces";
+import { Category, EventPreview } from "../../interfaces";
 import useSWRImmutable from "swr/immutable";
 import ErrorMessage from "../../components/ErrorMessage";
+import { useRouter } from "next/router";
+import { AnimatePresence, motion } from "framer-motion";
 
 type FormData = {
   event_name: string;
   details: string;
-  start: Date;
+  date: Date;
   category: Category;
 };
 
@@ -140,42 +144,90 @@ const Calendar = (props: UseControllerProps<FormData>) => {
 };
 
 const CreateEvent = () => {
+  const router = useRouter();
   const { data: session, status: sessionStatus } = useSession();
   const { data: categoryList, error: categoryError } = useSWRImmutable(
     () => "/api/events/categoryList"
   );
+  const [createError, setCreateError] = useState<boolean>(false);
 
   const { register, handleSubmit, control, setValue, watch } =
     useForm<FormData>({
       defaultValues: {
         details: "",
-        start: add(startOfToday(), { hours: new Date().getHours() }),
+        date: add(startOfToday(), { hours: new Date().getHours() }),
         category: {},
       },
       mode: "onChange",
     });
 
-  register("start", { required: true });
+  register("date", { required: true });
   register("category", { required: true });
 
   const liveFields = watch();
 
   const getStartDate = (value: string) => {
     let startTime = parse(value, "HH:mm", new Date());
-    return set(liveFields.start, {
+    return set(liveFields.date, {
       hours: startTime.getHours(),
       minutes: startTime.getMinutes(),
     });
   };
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
+  const onSubmit = async (data: FormData) => {
+    const eventRes = await fetch("/api/events/createEvent", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        eventName: data.event_name,
+        details: data.details,
+        eventDate: data.date,
+        category: data.category.id,
+        userId: session?.userId,
+      }),
+    });
+    if (!eventRes.ok) {
+      setCreateError(true);
+      return;
+    }
+    const { data: eventInfo }: { data: EventPreview } = await eventRes.json();
+    router.push(`/events/${eventInfo.id}`);
   };
 
   if (categoryError) return <ErrorMessage errorMessage={categoryError} />;
 
   return (
-    <div className="mx-auto max-w-4xl grid gap-y-8">
+    <div className="relative mx-auto max-w-4xl grid gap-y-8">
+      <AnimatePresence>
+        {createError && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.5 }}
+            className="-top-8 cursor-pointer z-20 absolute bg-gray-800 shadow-xl rounded px-6 py-2 w-full flex items-center justify-between"
+            onClick={() => setCreateError(false)}
+          >
+            <div>
+              <div className="flex items-center gap-x-2">
+                <HiExclamationCircle className="text-xl text-red-400" />
+                <h2 className="text-lg font-semibold">Error</h2>
+              </div>
+              <p className="text-sm text-gray-300">
+                There was an error creating your event. Please try again later.
+              </p>
+            </div>
+            <button
+              type="button"
+              className="hover:bg-gray-700 p-2 rounded duration-200"
+            >
+              <HiX className="text-xl" />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <div className="grid gap-y-2">
         <div className="flex items-center gap-x-4">
           <Image
@@ -231,20 +283,25 @@ const CreateEvent = () => {
                   <span className="absolute w-1 h-full bg-indigo-500 rounded-l"></span>
                   <div className="flex items-center gap-x-2">
                     {session?.user ? (
-                      <Image
-                        src={String(session?.user?.image)}
-                        alt="user-icon"
-                        width={24}
-                        height={24}
-                        layout="fixed"
-                        className="rounded-full"
-                      />
+                      <>
+                        <Image
+                          src={String(session?.user?.image)}
+                          alt="user-icon"
+                          width={24}
+                          height={24}
+                          layout="fixed"
+                          className="rounded-full"
+                        />
+                        <p className="text-sm font-semibold">
+                          {session?.user?.name}
+                        </p>
+                      </>
                     ) : (
-                      <div className="w-6 aspect-square rounded-full bg-gray-700 animate-pulse"></div>
+                      <>
+                        <div className="w-6 aspect-square rounded-full bg-gray-700 animate-pulse"></div>
+                        <div className="w-16 h-5 rounded bg-gray-700 animate-pulse"></div>
+                      </>
                     )}
-                    <p className="text-sm font-semibold">
-                      {session?.user?.name}
-                    </p>
                   </div>
                   <div className="grid gap-y-2">
                     <div>
@@ -256,7 +313,7 @@ const CreateEvent = () => {
                     <div>
                       <h2 className="text-sm font-semibold">Start Date</h2>
                       <p className="text-sm text-gray-300">
-                        {format(liveFields.start, "HH:mm - dd/MM/yyyy")}
+                        {format(liveFields.date, "HH:mm - dd/MM/yyyy")}
                       </p>
                     </div>
                     <div>
@@ -289,6 +346,7 @@ const CreateEvent = () => {
           type="text"
           className="form-input input text-lg"
           placeholder="Event Name"
+          maxLength={32}
           {...register("event_name", { required: true, maxLength: 32 })}
         />
         <div className="flex justify-between items-center bg-gray-800 border border-gray-700 px-4 py-2 rounded">
@@ -329,7 +387,7 @@ const CreateEvent = () => {
                   open && "bg-gray-800 ring-2"
                 )}
               >
-                <span>{format(liveFields.start, "dd/MM/yyyy")}</span>
+                <span>{format(liveFields.date, "dd/MM/yyyy")}</span>
                 <HiChevronDown className="text-xl" />
               </Menu.Button>
               <Transition
@@ -345,7 +403,7 @@ const CreateEvent = () => {
                   <Menu.Item>
                     <Calendar
                       control={control}
-                      name="start"
+                      name="date"
                       rules={{ required: true }}
                     />
                   </Menu.Item>
@@ -358,8 +416,8 @@ const CreateEvent = () => {
           name="category"
           as="div"
           className="relative"
-          value={format(liveFields.start, "HH:mm")}
-          onChange={(value) => setValue("start", getStartDate(value))}
+          value={format(liveFields.date, "HH:mm")}
+          onChange={(value) => setValue("date", getStartDate(value))}
         >
           {({ open }) => (
             <>
@@ -369,7 +427,7 @@ const CreateEvent = () => {
                   open && "bg-gray-800 ring-2"
                 )}
               >
-                <span>{format(liveFields.start, "HH:mm")}</span>
+                <span>{format(liveFields.date, "HH:mm")}</span>
                 <HiChevronDown className="text-xl" />
               </Listbox.Button>
               <Transition
@@ -389,7 +447,7 @@ const CreateEvent = () => {
                     <Listbox.Option
                       className={classNames(
                         "cursor-pointer rounded py-1.5  duration-200",
-                        format(liveFields.start, "HH:mm") ===
+                        format(liveFields.date, "HH:mm") ===
                           format(time, "HH:mm")
                           ? "bg-indigo-400 hover:bg-indigo-500"
                           : "hover:bg-gray-700"
