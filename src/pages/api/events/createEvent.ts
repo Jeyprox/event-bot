@@ -13,7 +13,7 @@ const eventHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     eventName: string;
     eventDate: Date;
     details: string;
-    category: Category;
+    category: number;
     userId: string;
   } = req.body;
   const newEvent = await prisma.event.create({
@@ -21,7 +21,7 @@ const eventHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       name: eventName,
       date: eventDate,
       details: details,
-      categoryId: category.id,
+      categoryId: category,
       createdBy: userId,
     },
   });
